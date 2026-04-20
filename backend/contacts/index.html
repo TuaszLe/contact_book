@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="vi" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VETC - Thu phí tự động</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&amp;family=DM+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    .font-display { font-family: 'Playfair Display', Georgia, serif; }
+    .font-body { font-family: 'DM Sans', sans-serif; }
+    .product-card { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .product-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.12); }
+    .btn-primary { transition: all 0.25s ease; }
+    .btn-primary:hover { transform: scale(1.04); filter: brightness(1.1); }
+    .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+    .marquee { animation: scroll-left 20s linear infinite; }
+    @keyframes scroll-left {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+    .hero-gradient {
+      background: linear-gradient(135deg, #0a1f0f 0%, #0d2e12 50%, #1a3a1e 100%);
+    }
+    .gold-gradient {
+      background: linear-gradient(135deg, #22c55e, #4ade80, #22c55e);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card-shine {
+      position: relative;
+      overflow: hidden;
+    }
+    .card-shine::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(201,169,110,0.06) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+    .card-shine:hover::before { opacity: 1; }
+    .counter { transition: transform 0.15s ease; }
+    .counter:active { transform: scale(0.9); }
+    .location-card { transition: all 0.3s ease; }
+    .location-card:hover { box-shadow: 0 15px 35px rgba(34,197,94,0.15); }
+  </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full font-body" style="background-color: #0a1f0f; color: #e8f3eb;">
+  <div id="app" class="w-full h-full overflow-auto"><!-- Nav -->
+   <nav class="fixed top-0 left-0 w-full z-50" style="background: rgba(10,31,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(34,197,94,0.15);">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+     <div class="flex items-center gap-2">
+      <div style="width:36px;height:36px;background:linear-gradient(135deg,#22c55e,#4ade80);border-radius:8px;" class="flex items-center justify-center"><span style="color:#0a1f0f;font-weight:900;font-size:14px;" class="font-display">V</span>
+      </div><span class="font-display text-xl font-bold" style="color:#22c55e;">VETC</span>
+     </div>
+     <div class="hidden md:flex items-center gap-8 text-sm font-medium" style="color:#86c895;"><a href="#products" class="hover:text-white transition">Sản phẩm</a> <a href="#stations" class="hover:text-white transition">Trạm thu phí</a> <a href="#garages" class="hover:text-white transition">Gara oto</a> <a href="#contact" class="hover:text-white transition">Liên hệ</a>
+     </div><button id="cart-btn" class="relative flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold" style="background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);"> <i data-lucide="shopping-bag" style="width:18px;height:18px;"></i> <span id="cart-count">0</span> </button>
+    </div>
+   </nav><!-- Hero -->
+   <header class="hero-gradient relative w-full pt-32 pb-24 px-6 overflow-hidden">
+    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle at 20% 50%, #22c55e 1px, transparent 1px), radial-gradient(circle at 80% 20%, #22c55e 1px, transparent 1px); background-size: 60px 60px;"></div>
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+     <p class="text-sm tracking-[0.3em] uppercase mb-4 font-semibold" style="color:#22c55e;">Hệ thống thu phí hiện đại</p>
+     <h1 id="hero-title" class="font-display text-4xl md:text-6xl lg:text-7xl font-900 leading-tight mb-6 gold-gradient">VETC</h1>
+     <p id="hero-subtitle" class="text-lg md:text-xl mb-10 max-w-2xl mx-auto" style="color:#86c895;">Hệ thống thu phí không dừng hiện đại, an toàn và tiện lợi cho mọi chuyến đi.</p><a href="#products" id="cta-btn" class="btn-primary inline-flex items-center gap-2 px-8 py-4 rounded-full text-base font-bold" style="background:linear-gradient(135deg,#22c55e,#4ade80);color:#0a1f0f;"> <span id="cta-text">Đăng ký ngay</span> <i data-lucide="arrow-right" style="width:20px;height:20px;"></i> </a>
+    </div>
+   </header><!-- Marquee -->
+   <div class="w-full overflow-hidden py-4" style="background:#111; border-top:1px solid rgba(34,197,94,0.1); border-bottom:1px solid rgba(34,197,94,0.1);">
+    <div class="marquee flex gap-12 whitespace-nowrap text-xs tracking-[0.2em] uppercase font-semibold" style="color:#3a5c41;"><span>✦ Không xếp hàng</span><span>✦ Thanh toán tự động</span><span>✦ Bảo mật cao</span><span>✦ Hỗ trợ toàn quốc</span><span>✦ Giải pháp thông minh</span> <span>✦ Không xếp hàng</span><span>✦ Thanh toán tự động</span><span>✦ Bảo mật cao</span><span>✦ Hỗ trợ toàn quốc</span><span>✦ Giải pháp thông minh</span>
+    </div>
+   </div><!-- Products -->
+   <section id="products" class="max-w-7xl mx-auto px-6 py-20">
+    <div class="text-center mb-14 fade-up">
+     <p class="text-xs tracking-[0.3em] uppercase mb-2 font-semibold" style="color:#22c55e;">Dịch vụ &amp; sản phẩm</p>
+     <h2 class="font-display text-3xl md:text-4xl font-bold" style="color:#e8f3eb;">Thiết bị và dịch vụ VETC</h2>
+    </div>
+    <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+    </div>
+   </section><!-- Stations -->
+   <section id="stations" class="w-full py-20 px-6" style="background:#111;">
+    <div class="max-w-7xl mx-auto">
+     <div class="text-center mb-14 fade-up">
+      <p class="text-xs tracking-[0.3em] uppercase mb-2 font-semibold" style="color:#22c55e;">Địa điểm</p>
+      <h2 class="font-display text-3xl md:text-4xl font-bold" style="color:#e8f3eb;">Trạm thu phí trên toàn quốc</h2>
+     </div>
+     <div id="stations-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+     </div>
+    </div>
+   </section><!-- Garages -->
+   <section id="garages" class="max-w-7xl mx-auto px-6 py-20">
+    <div class="text-center mb-14 fade-up">
+     <p class="text-xs tracking-[0.3em] uppercase mb-2 font-semibold" style="color:#22c55e;">Địa điểm</p>
+     <h2 class="font-display text-3xl md:text-4xl font-bold" style="color:#e8f3eb;">Gara oto - Lắp đặt VETC</h2>
+    </div>
+    <div id="garages-grid" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    </div>
+   </section><!-- About -->
+   <section id="about" class="w-full py-20 px-6" style="background:#111;">
+    <div class="max-w-5xl mx-auto grid md:grid-cols-3 gap-10 fade-up">
+     <div class="text-center p-8 rounded-2xl" style="background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.1);">
+      <div class="w-14 h-14 mx-auto mb-5 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#22c55e,#4ade80);"><i data-lucide="zap" style="width:24px;height:24px;color:#0a1f0f;"></i>
+      </div>
+      <h3 class="font-display text-lg font-bold mb-2" style="color:#e8f3eb;">Thanh toán nhanh</h3>
+      <p class="text-sm" style="color:#5a755f;">Xử lý thanh toán tự động, không cần dừng xe</p>
+     </div>
+     <div class="text-center p-8 rounded-2xl" style="background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.1);">
+      <div class="w-14 h-14 mx-auto mb-5 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#22c55e,#4ade80);"><i data-lucide="lock" style="width:24px;height:24px;color:#0a1f0f;"></i>
+      </div>
+      <h3 class="font-display text-lg font-bold mb-2" style="color:#e8f3eb;">Bảo mật tối cao</h3>
+      <p class="text-sm" style="color:#5a755f;">Mã hóa dữ liệu, bảo vệ thông tin cá nhân</p>
+     </div>
+     <div class="text-center p-8 rounded-2xl" style="background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.1);">
+      <div class="w-14 h-14 mx-auto mb-5 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg,#22c55e,#4ade80);"><i data-lucide="globe" style="width:24px;height:24px;color:#0a1f0f;"></i>
+      </div>
+      <h3 class="font-display text-lg font-bold mb-2" style="color:#e8f3eb;">Phạm vi toàn quốc</h3>
+      <p class="text-sm" style="color:#5a755f;">Sử dụng tại hơn 100 trạm thu phí trên cả nước</p>
+     </div>
+    </div>
+   </section><!-- Contact -->
+   <section id="contact" class="max-w-3xl mx-auto px-6 py-20">
+    <div class="text-center mb-10 fade-up">
+     <p class="text-xs tracking-[0.3em] uppercase mb-2 font-semibold" style="color:#22c55e;">Liên hệ</p>
+     <h2 class="font-display text-3xl font-bold" style="color:#e8f3eb;">Gửi tin nhắn cho chúng tôi</h2>
+    </div>
+    <form id="contact-form" class="space-y-5 fade-up">
+     <div><label for="cf-name" class="block text-sm font-medium mb-1" style="color:#86c895;">Họ và tên</label> <input id="cf-name" type="text" placeholder="Nguyễn Văn A" class="w-full px-4 py-3 rounded-xl text-sm outline-none focus:ring-2" style="background:#1a1a1a;border:1px solid rgba(34,197,94,0.2);color:#e8f3eb;--tw-ring-color:#22c55e;">
+     </div>
+     <div><label for="cf-email" class="block text-sm font-medium mb-1" style="color:#86c895;">Email</label> <input id="cf-email" type="email" placeholder="email@example.com" class="w-full px-4 py-3 rounded-xl text-sm outline-none focus:ring-2" style="background:#1a1a1a;border:1px solid rgba(34,197,94,0.2);color:#e8f3eb;--tw-ring-color:#22c55e;">
+     </div>
+     <div><label for="cf-msg" class="block text-sm font-medium mb-1" style="color:#86c895;">Nội dung</label> <textarea id="cf-msg" rows="4" placeholder="Nhập nội dung..." class="w-full px-4 py-3 rounded-xl text-sm outline-none focus:ring-2 resize-none" style="background:#1a1a1a;border:1px solid rgba(34,197,94,0.2);color:#e8f3eb;--tw-ring-color:#22c55e;"></textarea>
+     </div><button type="submit" class="btn-primary w-full py-3 rounded-xl font-bold text-sm" style="background:linear-gradient(135deg,#22c55e,#4ade80);color:#0a1f0f;">Gửi tin nhắn</button>
+     <p id="form-success" class="text-center text-sm font-medium hidden" style="color:#22c55e;">✓ Cảm ơn bạn! Chúng tôi sẽ phản hồi sớm nhất.</p>
+    </form>
+   </section><!-- Footer -->
+   <footer class="w-full py-10 px-6 text-center text-sm" style="background:#080808;color:#3a5c41;border-top:1px solid rgba(34,197,94,0.1);">
+    <p>© 2024 <span class="font-display font-bold" style="color:#22c55e;">VETC</span>. Tất cả quyền được bảo lưu.</p>
+   </footer><!-- Cart Drawer -->
+   <div id="cart-overlay" class="fixed inset-0 z-[60] hidden" style="background:rgba(0,0,0,0.6);">
+    <div id="cart-drawer" class="absolute right-0 top-0 h-full w-full max-w-md p-6 overflow-auto" style="background:#111;border-left:1px solid rgba(34,197,94,0.15);">
+     <div class="flex items-center justify-between mb-8">
+      <h3 class="font-display text-xl font-bold" style="color:#e8f3eb;">Giỏ hàng</h3><button id="close-cart" class="p-2 rounded-lg" style="color:#86c895;"><i data-lucide="x" style="width:22px;height:22px;"></i></button>
+     </div>
+     <div id="cart-items"></div>
+     <div id="cart-empty" class="text-center py-16" style="color:#3a5c41;"><i data-lucide="shopping-bag" style="width:48px;height:48px;margin:0 auto 12px;opacity:0.4;"></i>
+      <p>Giỏ hàng trống</p>
+     </div>
+     <div id="cart-footer" class="hidden mt-8 pt-6" style="border-top:1px solid rgba(34,197,94,0.15);">
+      <div class="flex justify-between items-center mb-5"><span class="font-semibold" style="color:#86c895;">Tổng cộng</span> <span id="cart-total" class="font-display text-2xl font-bold" style="color:#22c55e;">0₫</span>
+      </div><button class="btn-primary w-full py-3 rounded-xl font-bold text-sm" style="background:linear-gradient(135deg,#22c55e,#4ade80);color:#0a1f0f;" onclick="showCheckoutMsg()">Thanh toán</button>
+      <p id="checkout-msg" class="text-center text-xs mt-3 hidden" style="color:#5a755f;">Demo — Tính năng thanh toán chưa khả dụng</p>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+  const products = [
+    { id: 1, name: 'Thẻ ETC Không Dừng', price: 450000, badge: 'Bán chạy', image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=500&h=500&fit=crop', desc: 'Thẻ ETC tự động, tương thích toàn quốc' },
+    { id: 2, name: 'Thiết bị ghi nhận biển số', price: 2890000, badge: 'Mới', image: 'https://images.unsplash.com/photo-1606986628025-35d57e735ae0?w=500&h=500&fit=crop', desc: 'Công nghệ nhận diện biển số cao cấp' },
+    { id: 3, name: 'Hệ thống quản lý đội xe', price: 1890000, badge: null, image: 'https://images.unsplash.com/photo-1612198188060-c7c2a3b66eae?w=500&h=500&fit=crop', desc: 'Quản lý và theo dõi đội xe thời thực' },
+    { id: 4, name: 'Dịch vụ cấp thẻ ETC', price: 0, badge: 'Dịch vụ', image: 'https://images.unsplash.com/photo-1617638924702-92f37fcb2fdd?w=500&h=500&fit=crop', desc: 'Hỗ trợ cấp lập và kích hoạt thẻ' },
+    { id: 5, name: 'Tư vấn & cài đặt hệ thống', price: 0, badge: null, image: 'https://images.unsplash.com/photo-1606986628025-35d57e735ae0?w=500&h=500&fit=crop', desc: 'Tư vấn miễn phí và cài đặt chuyên nghiệp' },
+    { id: 6, name: 'Gói doanh nghiệp toàn diện', price: 3290000, badge: 'Mới', image: 'https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=500&h=500&fit=crop', desc: 'Giải pháp hoàn chỉnh cho doanh nghiệp' },
+  ];
+
+  const stations = [
+    { id: 1, name: 'Trạm Cầu Bẻo', city: 'Hải Phòng', distance: '5km' },
+    { id: 2, name: 'Trạm Thái Nguyên', city: 'Thái Nguyên', distance: '15km' },
+    { id: 3, name: 'Trạm Giang Điểm', city: 'Hà Nội', distance: '25km' },
+    { id: 4, name: 'Trạm Yên Bình', city: 'Vĩnh Phúc', distance: '45km' },
+    { id: 5, name: 'Trạm Nho Quan', city: 'Ninh Bình', distance: '120km' },
+    { id: 6, name: 'Trạm Nghi Sơn', city: 'Thanh Hóa', distance: '180km' },
+    { id: 7, name: 'Trạm Vũng Áng', city: 'Hà Tĩnh', distance: '250km' },
+    { id: 8, name: 'Trạm Bãi Vọt', city: 'Quảng Bình', distance: '380km' },
+  ];
+
+  const garages = [
+    { id: 1, name: 'Gara VETC - Hà Nội', address: '123 Đường Láng, Quận Đống Đa', phone: '024-1234-5678', image: 'https://images.unsplash.com/photo-1625231724375-c4d17c8a1a74?w=600&h=400&fit=crop' },
+    { id: 2, name: 'Gara VETC - HCM', address: '456 Nguyễn Hữu Cảnh, Quận Bình Thạnh', phone: '028-9876-5432', image: 'https://images.unsplash.com/photo-1487881594728-f3b1b6b2b3d5?w=600&h=400&fit=crop' },
+    { id: 3, name: 'Gara VETC - Đà Nẵng', address: '789 Trần Phú, Quận Hải Châu', phone: '0236-1122-3344', image: 'https://images.unsplash.com/photo-1553882900-f2b08422038e?w=600&h=400&fit=crop' },
+    { id: 4, name: 'Gara VETC - Hải Phòng', address: '321 Trần Hưng Đạo, Quận Hồng Bàng', phone: '0225-4455-6677', image: 'https://images.unsplash.com/photo-1464207687429-7505649dae38?w=600&h=400&fit=crop' },
+  ];
+
+  let cart = {};
+
+  function fmt(n) { return n > 0 ? n.toLocaleString('vi-VN') + '₫' : 'Miễn phí'; }
+
+  function renderProducts() {
+    const grid = document.getElementById('product-grid');
+    grid.innerHTML = products.map(p => `
+      <div class="product-card card-shine rounded-2xl p-6 fade-up" style="background:#151515;border:1px solid rgba(34,197,94,0.1);">
+        <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg,#1a3a1e,#0d2e12)'; this.alt='Ảnh sản phẩm';" class="w-full aspect-square rounded-xl mb-5 object-cover">
+        ${p.badge ? `<span class="inline-block px-3 py-1 rounded-full text-[10px] tracking-wider uppercase font-bold mb-3" style="background:rgba(34,197,94,0.15);color:#22c55e;">${p.badge}</span>` : ''}
+        <h3 class="font-display text-lg font-bold mb-1" style="color:#e8f3eb;">${p.name}</h3>
+        <p class="text-xl font-bold mb-5" style="color:#22c55e;">${fmt(p.price)}</p>
+        <button onclick="addToCart(${p.id})" class="btn-primary w-full py-3 rounded-xl font-semibold text-sm flex items-center justify-center gap-2" style="background:rgba(34,197,94,0.12);color:#22c55e;border:1px solid rgba(34,197,94,0.25);">
+          <i data-lucide="plus" style="width:16px;height:16px;"></i> Thêm vào giỏ
+        </button>
+      </div>
+    `).join('');
+    lucide.createIcons();
+    requestAnimationFrame(() => document.querySelectorAll('.fade-up').forEach(el => observer.observe(el)));
+  }
+
+  function renderStations() {
+    const grid = document.getElementById('stations-grid');
+    grid.innerHTML = stations.map(s => `
+      <div class="location-card rounded-2xl p-5 fade-up" style="background:#1a1a1a;border:1px solid rgba(34,197,94,0.1);">
+        <div class="flex items-start gap-3 mb-3">
+          <i data-lucide="map-pin" style="width:20px;height:20px;color:#22c55e;flex-shrink:0;"></i>
+          <div>
+            <h4 class="font-bold text-sm" style="color:#e8f3eb;">${s.name}</h4>
+            <p class="text-xs" style="color:#86c895;">${s.city}</p>
+          </div>
+        </div>
+        <p class="text-xs flex items-center gap-2" style="color:#5a755f;"><i data-lucide="navigation" style="width:14px;height:14px;"></i> Cách đây ${s.distance}</p>
+      </div>
+    `).join('');
+    lucide.createIcons();
+    requestAnimationFrame(() => document.querySelectorAll('.fade-up').forEach(el => observer.observe(el)));
+  }
+
+  function renderGarages() {
+    const grid = document.getElementById('garages-grid');
+    grid.innerHTML = garages.map(g => `
+      <div class="location-card rounded-2xl overflow-hidden fade-up" style="background:#151515;border:1px solid rgba(34,197,94,0.1);">
+        <img src="${g.image}" alt="${g.name}" loading="lazy" onerror="console.error('Image failed to load:', this.src); this.style.background='linear-gradient(135deg,#1a3a1e,#0d2e12)'; this.alt='Ảnh gara';" class="w-full h-40 object-cover">
+        <div class="p-5">
+          <h4 class="font-display font-bold text-lg mb-2" style="color:#e8f3eb;">${g.name}</h4>
+          <div class="space-y-2 mb-4 text-sm" style="color:#86c895;">
+            <p class="flex items-start gap-2"><i data-lucide="map-pin" style="width:16px;height:16px;flex-shrink:0;margin-top:2px;"></i> <span>${g.address}</span></p>
+            <p class="flex items-center gap-2"><i data-lucide="phone" style="width:16px;height:16px;"></i> ${g.phone}</p>
+          </div>
+          <button class="w-full py-2 rounded-lg text-sm font-semibold" style="background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);">Liên hệ</button>
+        </div>
+      </div>
+    `).join('');
+    lucide.createIcons();
+    requestAnimationFrame(() => document.querySelectorAll('.fade-up').forEach(el => observer.observe(el)));
+  }
+
+  function addToCart(id) {
+    cart[id] = (cart[id] || 0) + 1;
+    updateCart();
+  }
+
+  function updateCart() {
+    const total = Object.entries(cart).reduce((s, [id, qty]) => s + products.find(p => p.id == id).price * qty, 0);
+    const count = Object.values(cart).reduce((s, q) => s + q, 0);
+    document.getElementById('cart-count').textContent = count;
+    const items = document.getElementById('cart-items');
+    const empty = document.getElementById('cart-empty');
+    const footer = document.getElementById('cart-footer');
+    if (count === 0) { items.innerHTML = ''; empty.classList.remove('hidden'); footer.classList.add('hidden'); return; }
+    empty.classList.add('hidden');
+    footer.classList.remove('hidden');
+    document.getElementById('cart-total').textContent = fmt(total);
+    items.innerHTML = Object.entries(cart).map(([id, qty]) => {
+      const p = products.find(x => x.id == id);
+      return `<div class="flex items-center gap-4 mb-4 p-3 rounded-xl" style="background:#1a1a1a;">
+        <img src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.style.background='linear-gradient(135deg,#1a3a1e,#0d2e12)'" style="width:60px;height:60px;object-fit:cover;border-radius:8px;">
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-semibold truncate" style="color:#e8f3eb;">${p.name}</p>
+          <p class="text-sm" style="color:#22c55e;">${fmt(p.price)}</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="changeQty(${id},-1)" class="counter w-8 h-8 rounded-lg flex items-center justify-center text-lg font-bold" style="background:rgba(34,197,94,0.1);color:#22c55e;">−</button>
+          <span class="text-sm font-bold w-6 text-center" style="color:#e8f3eb;">${qty}</span>
+          <button onclick="changeQty(${id},1)" class="counter w-8 h-8 rounded-lg flex items-center justify-center text-lg font-bold" style="background:rgba(34,197,94,0.1);color:#22c55e;">+</button>
+        </div>
+      </div>`;
+    }).join('');
+    lucide.createIcons();
+  }
+
+  function changeQty(id, d) {
+    cart[id] = (cart[id] || 0) + d;
+    if (cart[id] <= 0) delete cart[id];
+    updateCart();
+  }
+
+  function showCheckoutMsg() {
+    document.getElementById('checkout-msg').classList.remove('hidden');
+  }
+
+  // Cart drawer
+  document.getElementById('cart-btn').addEventListener('click', () => document.getElementById('cart-overlay').classList.remove('hidden'));
+  document.getElementById('close-cart').addEventListener('click', () => document.getElementById('cart-overlay').classList.add('hidden'));
+  document.getElementById('cart-overlay').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.classList.add('hidden'); });
+
+  // Contact form
+  document.getElementById('contact-form').addEventListener('submit', e => {
+    e.preventDefault();
+    document.getElementById('form-success').classList.remove('hidden');
+    e.target.reset();
+    setTimeout(() => document.getElementById('form-success').classList.add('hidden'), 4000);
+  });
+
+  // Scroll observer
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+
+  // Default config
+  const defaultConfig = {
+    background_color: '#0a1f0f',
+    surface_color: '#151515',
+    text_color: '#e8f3eb',
+    primary_action_color: '#22c55e',
+    secondary_action_color: '#86c895',
+    font_family: 'Playfair Display',
+    font_size: 16,
+    hero_title: 'VETC',
+    hero_subtitle: 'Hệ thống thu phí không dừng hiện đại, an toàn và tiện lợi cho mọi chuyến đi.',
+    cta_text: 'Đăng ký ngay'
+  };
+
+  async function onConfigChange(config) {
+    const bg = config.background_color || defaultConfig.background_color;
+    const surface = config.surface_color || defaultConfig.surface_color;
+    const text = config.text_color || defaultConfig.text_color;
+    const primary = config.primary_action_color || defaultConfig.primary_action_color;
+    const secondary = config.secondary_action_color || defaultConfig.secondary_action_color;
+    const font = config.font_family || defaultConfig.font_family;
+    const size = config.font_size || defaultConfig.font_size;
+
+    document.body.style.backgroundColor = bg;
+    document.body.style.color = text;
+    document.body.style.fontFamily = `${font}, DM Sans, sans-serif`;
+    document.body.style.fontSize = size + 'px';
+
+    document.getElementById('hero-title').textContent = config.hero_title || defaultConfig.hero_title;
+    document.getElementById('hero-subtitle').textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
+    document.getElementById('cta-text').textContent = config.cta_text || defaultConfig.cta_text;
+  }
+
+  window.elementSdk.init({
+    defaultConfig,
+    onConfigChange,
+    mapToCapabilities: (config) => ({
+      recolorables: [
+        { get: () => config.background_color || defaultConfig.background_color, set: v => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+        { get: () => config.surface_color || defaultConfig.surface_color, set: v => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+        { get: () => config.text_color || defaultConfig.text_color, set: v => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+        { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: v => { config.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
+        { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: v => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } },
+      ],
+      borderables: [],
+      fontEditable: {
+        get: () => config.font_family || defaultConfig.font_family,
+        set: v => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
+      },
+      fontSizeable: {
+        get: () => config.font_size || defaultConfig.font_size,
+        set: v => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
+      }
+    }),
+    mapToEditPanelValues: (config) => new Map([
+      ['hero_title', config.hero_title || defaultConfig.hero_title],
+      ['hero_subtitle', config.hero_subtitle || defaultConfig.hero_subtitle],
+      ['cta_text', config.cta_text || defaultConfig.cta_text],
+    ])
+  });
+
+  renderProducts();
+  renderStations();
+  renderGarages();
+  lucide.createIcons();
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9e87c4f4a6ba6e52',t:'MTc3NTU1MTY2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

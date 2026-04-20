@@ -1,0 +1,59 @@
+import { Menu } from "antd";
+import { Link } from "react-router-dom";
+import {
+  UserOutlined,
+  DashboardOutlined,
+  ToolOutlined,
+  PhoneOutlined,
+} from "@ant-design/icons";
+
+type Props={
+  collapsed:boolean
+}
+
+export default function Sidebar({collapsed}:Props){
+
+  return(
+
+    <Menu
+      theme="dark"
+      mode="inline"
+      inlineCollapsed={collapsed}
+      style={{height:"100%"}}
+      items={[
+        {
+          key:"1",
+          icon:<DashboardOutlined/>,
+          label:<Link to="/">Dashboard</Link>
+        },
+        {
+          key:"2",
+          icon:<UserOutlined/>,
+          label:<Link to="/contacts">Contacts</Link>
+        },
+        {
+          key:"3",
+          icon: <span>🚧</span>,
+          label:<Link to="/tollplaza">TollPlaza</Link>
+        },
+        {
+          key:"4",
+          icon: <span>🅿️</span>,
+          label:<Link to="/Parking">Parking</Link>
+        },
+        {
+          key:"5",
+          icon:<ToolOutlined />,
+          label:<Link to="/mtnc">Lịch bảo trì</Link>
+        },
+        {
+          key:"6",
+          icon:<PhoneOutlined />,
+          label:<Link to="/so">Đầu mối cảnh báo</Link>
+        }
+      ]}
+    />
+
+  )
+
+}
