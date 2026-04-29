@@ -3,7 +3,6 @@ from django.shortcuts import get_object_or_404
 from .models import (
     Title,
     Project,
-    #Department,
     Contractor,
     Tollplaza,
     Contact,
@@ -18,12 +17,6 @@ from .models import (
 # CORE ENTITIES
 # ====================
 
-# class DepartmentAdmin(admin.ModelAdmin):
-#     list_display = ('name', 'description', 'status')
-#     list_filter = ('status',)
-#     search_fields = ('name', 'description')
-#     ordering = ('name',)
-
 
 class TitleAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'status')
@@ -33,9 +26,6 @@ class TitleAdmin(admin.ModelAdmin):
 
 
 class ContactAdmin(admin.ModelAdmin):
-    # list_display = ('firstname', 'lastname', 'email', 'phone', 'department', 'title', 'status')
-    # list_filter = ('department', 'title', 'status')
-    # raw_id_fields = ('department', 'title')
     list_display = ('firstname', 'lastname', 'email', 'phone', 'title', 'status')
     list_filter = ('title', 'status')
     search_fields = ('firstname', 'email', 'phone')
@@ -102,7 +92,6 @@ class ChannelAdmin(admin.ModelAdmin):
 # REGISTRATION
 # ====================
 
-#admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Title, TitleAdmin)
 admin.site.register(Contact, ContactAdmin)
 admin.site.register(Contractor, ContractorAdmin)

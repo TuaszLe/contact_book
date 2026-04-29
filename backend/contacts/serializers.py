@@ -3,7 +3,6 @@ from .models import (
     Parking,
     Contact,
     Tollplaza,
-    Department,
     Contractor,
     Project,
     Title,
@@ -16,12 +15,6 @@ from .models import (
 class TitleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Title
-        fields = ["id", "name"]
-
-
-class DepartmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Department
         fields = ["id", "name"]
 
 
@@ -83,7 +76,6 @@ class TollplazaSerializer(serializers.ModelSerializer):
 class ContactSerializer(serializers.ModelSerializer):
     # display name cho FK
     title_name = serializers.CharField(source="title.name", read_only=True)
-    department_name = serializers.CharField(source="department.name", read_only=True)
 
     # many-to-many
     tollplazas = TollplazaSimpleSerializer(many=True, read_only=True)
@@ -99,8 +91,6 @@ class ContactSerializer(serializers.ModelSerializer):
             "status",
             "title",
             "title_name",
-            "department",
-            "department_name",
             "tollplazas",
         ]
 

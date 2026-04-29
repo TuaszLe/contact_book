@@ -4,11 +4,10 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 import traceback
 
-from .models import Contact, Tollplaza, Department, Contractor, Project, Parking
+from .models import Contact, Tollplaza, Contractor, Project, Parking
 from .serializers import (
     ContactSerializer,
     TollplazaSerializer,
-    DepartmentSerializer,
     ContractorSerializer,
     ProjectSerializer,
     ParkingSerializer
@@ -23,21 +22,10 @@ from .serializers import (
 def contact_list_api(request):
 
     queryset = Contact.objects.select_related(
-        # "department",
         "title"
     ).all()
 
-    # search = request.GET.get("search")
-    # department = request.GET.get("department")
     title = request.GET.get("title")
-
-    # if search:
-    #     queryset = queryset.filter(
-    #         Q(name__icontains=search) |
-    #         Q(email__icontains=search) |
-    #         Q(phone__icontains=search)
-    #     )
-
 
     if title:
         queryset = queryset.filter(title_id=title)
@@ -62,17 +50,11 @@ def tollplaza_list_api(request):
         "tollplaza_channel_set__channel"
     ).all()
 
-    # search = request.GET.get("search")
     project = request.GET.get("project")
     type_ = request.GET.get("type")
     channel = request.GET.get("channel")
     channel_code = request.GET.get("channel_code")
 
-    # if search:
-    #     queryset = queryset.filter(
-    #         Q(name__icontains=search) |
-    #         Q(project__name__icontains=search)
-    #     )
 
     if project:
         queryset = queryset.filter(project_id=project)
@@ -85,20 +67,6 @@ def tollplaza_list_api(request):
         queryset = queryset.filter(tollplaza_channel__code__icontains=channel_code)
 
     serializer = TollplazaSerializer(queryset, many=True)
-
-    return Response(serializer.data)
-
-
-# ========================
-# DEPARTMENT LIST
-# ========================
-
-@api_view(["GET"])
-def department_list_api(request):
-
-    queryset = Department.objects.all().order_by("name")
-
-    serializer = DepartmentSerializer(queryset, many=True)
 
     return Response(serializer.data)
 
@@ -154,16 +122,9 @@ def parking_list_api(request):
 
     queryset = Parking.objects.select_related("contractor", "type").all()
 
-    # search = request.GET.get("search")
     contractor = request.GET.get("contractor")
     type_filter = request.GET.get("type")
 
-    # if search:
-    #     queryset = queryset.filter(
-    #         Q(name__icontains=search) |
-    #         Q(description__icontains=search) |
-    #         Q(address__icontains=search)
-    #     )
 
     if contractor:
         queryset = queryset.filter(contractor_id=contractor)

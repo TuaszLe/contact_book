@@ -5,7 +5,6 @@ from .contractor import Contractor
 from .type import Type
 from .channel import Channel
 from .title import Titles
-from .department import Department
 from .contact import Contact
 from .tollplaza import Tollplaza
 from .parking import Parking

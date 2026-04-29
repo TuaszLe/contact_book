@@ -20,8 +20,6 @@ class Contact(models.Model):
 
     title = models.ForeignKey(Titles, on_delete=models.SET_NULL, null=True, blank=True)
 
-    contact_type = models.CharField(max_length=20, choices=CONTACT_TYPE_CHOICES)
-
     tollplazas = models.ManyToManyField(Tollplaza, blank=True)
     parkings = models.ManyToManyField(Parking, blank=True)
 

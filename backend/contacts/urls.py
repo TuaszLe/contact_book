@@ -9,7 +9,7 @@ urlpatterns = [
     path('tollplazas/', views.tollplaza_list_api, name='tollplaza_list_api'),
     path("tollplazas/<int:pk>/", views.tollplaza_detail_api),
     # Dropdown APIs
-    path('departments/', views.department_list_api, name='department_list_api'),
+
     path('contractors/', views.contractor_list_api, name='contractor_list_api'),
     path('projects/', views.project_list_api, name='project_list_api'),
     # Parking
