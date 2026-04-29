@@ -23,12 +23,12 @@ from .serializers import (
 def contact_list_api(request):
 
     queryset = Contact.objects.select_related(
-        "department",
+        # "department",
         "title"
     ).all()
 
     # search = request.GET.get("search")
-    department = request.GET.get("department")
+    # department = request.GET.get("department")
     title = request.GET.get("title")
 
     # if search:
@@ -38,13 +38,11 @@ def contact_list_api(request):
     #         Q(phone__icontains=search)
     #     )
 
-    if department:
-        queryset = queryset.filter(department_id=department)
 
     if title:
         queryset = queryset.filter(title_id=title)
 
-    queryset = queryset.order_by("name")
+    queryset = queryset.order_by("firstname")
 
     serializer = ContactSerializer(queryset, many=True)
 
@@ -210,7 +208,7 @@ def global_search(request):
         # CONTACT
         # =========================
         contacts = Contact.objects.filter(
-            Q(name__icontains=keyword) |
+            Q(firstname__icontains=keyword) |
             Q(phone__icontains=keyword)
         ).distinct()[:5]
 

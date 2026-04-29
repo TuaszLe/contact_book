@@ -5,7 +5,7 @@ import axios from "axios";
 // ================== TYPES ==================
 type Contact = {
   id: number;
-  name: string;
+  firstname: string;
   phone: string;
 };
 
@@ -150,7 +150,7 @@ export default function SearchPage() {
               onClick={() => navigate(`/contact/${item.id}`)}
               style={{ cursor: "pointer", padding: 5 }}
             >
-              {item.name} - {item.phone}
+              {item.firstname} - {item.phone}
             </div>
           ))}
         </>
