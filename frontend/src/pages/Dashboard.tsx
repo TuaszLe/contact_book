@@ -156,7 +156,7 @@ export default function Dashboard() {
                     <Card title="Top 5 Trạm" style={{ marginBottom: 16 }}>
                       {top5tollplazas.slice(0, 5).map((i) => (
                         <p key={i.id}>
-                          <b>{i.name}</b> ({i.lanes})
+                          <b>{i.name}</b> ({i.lanes} làn)
                         </p>
                       ))}
                     </Card>
@@ -165,7 +165,7 @@ export default function Dashboard() {
                     <Card title="Theo dự án" style={{ marginBottom: 16 }}>
                       {tollplazaByProject.map((i) => (
                         <p key={i.key}>
-                          <b>{i.key}</b>: {i.count}
+                          <b>{i.key}</b>: {i.count} trạm
                         </p>
                       ))}
                     </Card>
@@ -174,7 +174,7 @@ export default function Dashboard() {
                     <Card title="Theo loại">
                       {tollplazaByType.map((i) => (
                         <p key={i.key}>
-                          <b>{i.key}</b>: {i.count}
+                          <b>{i.key}</b>: {i.count} trạm
                         </p>
                       ))}
                     </Card>
