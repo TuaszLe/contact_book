@@ -1,6 +1,7 @@
 from django.db import models
 from .project import Project
 from .type import Type
+from .contractor import Contractor
 
 class Tollplaza(models.Model):
     name = models.CharField(max_length=255)
@@ -8,6 +9,7 @@ class Tollplaza(models.Model):
     address = models.CharField(max_length=255)
     lat = models.FloatField(null=True, blank=True)
     lng = models.FloatField(null=True, blank=True)
+    contractor = models.ManyToManyField(Contractor, blank=True)
     project = models.ForeignKey(Project, on_delete=models.SET_NULL, null=True)
     type = models.ForeignKey(Type, on_delete=models.SET_NULL, null=True)
     lanes = models.IntegerField(default=0)

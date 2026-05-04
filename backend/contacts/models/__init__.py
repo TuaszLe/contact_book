@@ -10,7 +10,7 @@ from .tollplaza import Tollplaza
 from .parking import Parking
 from .junction import (
     Tollplaza_channel,
-    Tollplaza_contractor,
+    # Tollplaza_contractor,
     Tollplaza_contact,
     Parking_contact,
 )

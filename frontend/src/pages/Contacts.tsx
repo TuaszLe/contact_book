@@ -10,7 +10,6 @@ interface Contact {
   phone: string;
   email: string;
   title_name?: string;
-  department_name?: string;
   tollplazas?: Array<{ id: number; name: string }>;
 }
 

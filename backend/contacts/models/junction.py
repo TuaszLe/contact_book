@@ -16,12 +16,12 @@ class Tollplaza_channel(models.Model):
     class Meta:
         db_table = 'tollplaza_channel'
 
-class Tollplaza_contractor(models.Model):
-    tollplaza = models.ForeignKey(Tollplaza, on_delete=models.CASCADE)
-    contractor = models.ForeignKey(Contractor, on_delete=models.CASCADE)
+# class Tollplaza_contractor(models.Model):
+#     tollplaza = models.ForeignKey(Tollplaza, on_delete=models.CASCADE)
+#     contractor = models.ForeignKey(Contractor, on_delete=models.CASCADE)
 
-    class Meta:
-        db_table = 'tollplaza_contracter'
+#     class Meta:
+#         db_table = 'tollplaza_contracter'
 
 class Tollplaza_contact(models.Model):
     tollplaza = models.ForeignKey(Tollplaza, on_delete=models.CASCADE)

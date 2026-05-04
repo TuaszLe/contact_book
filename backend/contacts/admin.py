@@ -29,7 +29,7 @@ class ContactAdmin(admin.ModelAdmin):
     list_display = ('firstname', 'lastname', 'email', 'phone', 'title', 'status')
     list_filter = ('title', 'status')
     search_fields = ('firstname', 'email', 'phone')
-    raw_id_fields = ['title']
+    autocomplete_fields = ['title']
     ordering = ( 'firstname','lastname',)
 
 
@@ -62,7 +62,7 @@ class TollplazaAdmin(admin.ModelAdmin):
     list_display = ('name', 'address', 'project', 'type', 'lanes', 'status')
     list_filter = ('project', 'type', 'status')
     search_fields = ('name', 'address', 'description')
-    raw_id_fields = ('project', 'type')
+    autocomplete_fields = ('project', 'type', 'contractor')
     ordering = ('name',)
 
 
@@ -70,7 +70,7 @@ class ParkingAdmin(admin.ModelAdmin):
     list_display = ('name', 'address', 'contractor', 'type', 'lanes', 'status')
     list_filter = ('contractor', 'type', 'status')
     search_fields = ('name', 'address', 'description')
-    raw_id_fields = ('contractor', 'type')
+    autocomplete_fields = ('contractor', 'type')
     ordering = ('name',)
 
 
@@ -81,7 +81,7 @@ class ParkingAdmin(admin.ModelAdmin):
 class TollplazaChannelAdmin(admin.ModelAdmin):
     list_display = ('tollplaza', 'channel', 'code', 'status')
     list_filter = ('status',)
-    raw_id_fields = ('tollplaza', 'channel')
+    autocomplete_fields = ('tollplaza', 'channel')
 
 class ChannelAdmin(admin.ModelAdmin):
     list_display = ('name', 'provider', 'description', 'status')

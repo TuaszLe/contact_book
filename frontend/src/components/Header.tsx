@@ -15,7 +15,7 @@ export default function AppHeader() {
   return (
     <Header style={{ background: "#fff", padding: "0 20px" }}>
       <Search
-        placeholder="Tìm kiếm toàn hệ thống..."
+        placeholder="Tìm kiếm ..."
         allowClear
         style={{ width: 300 }}
         onSearch={handleSearch}
