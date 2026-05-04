@@ -45,3 +45,5 @@ export const getParkingDetail = async (id: number) => {
   const res = await axios.get(`${API}/parkings/${id}/`);
   return res.data;
 };
+
+export default api;

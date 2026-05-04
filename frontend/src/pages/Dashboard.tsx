@@ -81,6 +81,9 @@ export default function Dashboard() {
     0
   );
 
+  const top5tollplazas = tollplazas.sort((a, b) => (b.lanes ?? 0) - (a.lanes ?? 0)).slice(0, 5);
+  const top5parkings = parkings.sort((a, b) => (b.lanes ?? 0) - (a.lanes ?? 0)).slice(0, 5);
+
   // ===== LOADING =====
   if (loading) {
     return (
@@ -151,7 +154,7 @@ export default function Dashboard() {
 
                     {/* TOP */}
                     <Card title="Top 5 Trạm" style={{ marginBottom: 16 }}>
-                      {tollplazas.slice(0, 5).map((i) => (
+                      {top5tollplazas.slice(0, 5).map((i) => (
                         <p key={i.id}>
                           <b>{i.name}</b> ({i.lanes})
                         </p>
@@ -205,7 +208,7 @@ export default function Dashboard() {
                     </Card>
 
                     <Card title="Top 5" style={{ marginBottom: 16 }}>
-                      {parkings.slice(0, 5).map((i) => (
+                      {top5parkings.slice(0, 5).map((i) => (
                         <p key={i.id}>
                           <b>{i.name}</b>
                         </p>

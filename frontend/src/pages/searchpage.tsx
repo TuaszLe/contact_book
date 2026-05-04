@@ -1,8 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../services/api";
 
 // ================== TYPES ==================
+
 type Contact = {
   id: number;
   firstname: string;
@@ -65,9 +66,9 @@ export default function SearchPage() {
         try {
           setLoading(true);
 
-          const res = await axios.get(
-            `http://localhost:8000/api/search/?q=${keyword}`
-          );
+          const res = await api.get("/search/", {
+            params: { q: keyword },
+          });
 
           const result: SearchResult = res.data;
           setData(result);
