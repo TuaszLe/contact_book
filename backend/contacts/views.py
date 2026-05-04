@@ -155,7 +155,7 @@ def parking_detail_api(request, pk):
 def global_search(request):
     try:
         keyword = request.GET.get("q", "").strip()
-
+        print(f"KEYWORD: '{keyword}'")
         if not keyword:
             return Response({
                 "contacts": [],
