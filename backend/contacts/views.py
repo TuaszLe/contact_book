@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 import traceback
+import unicodedata
 
 from .models import Contact, Tollplaza, Contractor, Project, Parking
 from .serializers import (
@@ -12,6 +13,23 @@ from .serializers import (
     ProjectSerializer,
     ParkingSerializer
 )
+
+
+def remove_accents(text):
+    if not text:
+        return ""
+    text = unicodedata.normalize('NFD', str(text))
+    text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
+    return text.lower()
+
+
+def m(value, keyword_lower, keyword_no_accent):
+    if not value:
+        return False
+    return (
+        keyword_lower in str(value).lower() or
+        keyword_no_accent in remove_accents(value)
+    )
 
 
 # ========================
@@ -55,12 +73,11 @@ def tollplaza_list_api(request):
     channel = request.GET.get("channel")
     channel_code = request.GET.get("channel_code")
 
-
     if project:
         queryset = queryset.filter(project_id=project)
 
     if type_:
-        queryset = queryset.filter(type=type_) 
+        queryset = queryset.filter(type=type_)
     if channel:
         queryset = queryset.filter(tollplaza_channel__channel_id=channel)
     if channel_code:
@@ -98,6 +115,7 @@ def project_list_api(request):
 
     return Response(serializer.data)
 
+
 @api_view(["GET"])
 def tollplaza_detail_api(request, pk):
 
@@ -117,6 +135,7 @@ def tollplaza_detail_api(request, pk):
         "contacts": ContactSerializer(contacts, many=True).data
     })
 
+
 @api_view(["GET"])
 def parking_list_api(request):
 
@@ -124,7 +143,6 @@ def parking_list_api(request):
 
     contractor = request.GET.get("contractor")
     type_filter = request.GET.get("type")
-
 
     if contractor:
         queryset = queryset.filter(contractor_id=contractor)
@@ -135,6 +153,7 @@ def parking_list_api(request):
     serializer = ParkingSerializer(queryset, many=True)
 
     return Response(serializer.data)
+
 
 @api_view(["GET"])
 def parking_detail_api(request, pk):
@@ -151,11 +170,11 @@ def parking_detail_api(request, pk):
         "contacts": ContactSerializer(contacts, many=True).data
     })
 
+
 @api_view(["GET"])
 def global_search(request):
     try:
         keyword = request.GET.get("q", "").strip()
-        print(f"KEYWORD: '{keyword}'")
         if not keyword:
             return Response({
                 "contacts": [],
@@ -165,46 +184,58 @@ def global_search(request):
                 "parkings": []
             })
 
+        keyword_lower = keyword.lower()
+        keyword_no_accent = remove_accents(keyword)
+
         # =========================
         # CONTACT
         # =========================
-        contacts = Contact.objects.filter(
-            Q(firstname__icontains=keyword) |
-            Q(phone__icontains=keyword)
-        ).distinct()[:5]
+        all_contacts = Contact.objects.select_related("title").all()
+        contacts = [
+            c for c in all_contacts
+            if m(c.firstname, keyword_lower, keyword_no_accent)
+            or m(c.lastname, keyword_lower, keyword_no_accent)
+            or m(c.phone, keyword_lower, keyword_no_accent)
+            or m(c.email, keyword_lower, keyword_no_accent)
+        ][:5]
 
         # =========================
         # TOLLPLAZA
         # =========================
-        tollplazas = Tollplaza.objects.filter(
-            Q(name__icontains=keyword) |
-            Q(project__name__icontains=keyword) |
-            Q(address__icontains=keyword) |
-            Q(tollplaza_channel__code__icontains=keyword)
-        ).select_related("project", "type").distinct()[:5]
+        all_tollplazas = Tollplaza.objects.select_related("project", "type").all()
+        tollplazas = [
+            t for t in all_tollplazas
+            if m(t.name, keyword_lower, keyword_no_accent)
+            or m(t.address, keyword_lower, keyword_no_accent)
+            or m(t.project.name if t.project else None, keyword_lower, keyword_no_accent)
+        ][:5]
 
         # =========================
         # PROJECT
         # =========================
-        projects = Project.objects.filter(
-            Q(name__icontains=keyword)
-        )[:5]
+        projects = [
+            p for p in Project.objects.all()
+            if m(p.name, keyword_lower, keyword_no_accent)
+        ][:5]
 
         # =========================
         # CONTRACTOR
         # =========================
-        contractors = Contractor.objects.filter(
-            Q(name__icontains=keyword)
-        )[:5]
+        contractors = [
+            c for c in Contractor.objects.all()
+            if m(c.name, keyword_lower, keyword_no_accent)
+        ][:5]
 
         # =========================
         # PARKING
         # =========================
-        parkings = Parking.objects.filter(
-            Q(name__icontains=keyword) |
-            Q(address__icontains=keyword) |
-            Q(contractor__name__icontains=keyword)
-        ).select_related("contractor", "type")[:5]
+        all_parkings = Parking.objects.select_related("contractor", "type").all()
+        parkings = [
+            p for p in all_parkings
+            if m(p.name, keyword_lower, keyword_no_accent)
+            or m(p.address, keyword_lower, keyword_no_accent)
+            or m(p.contractor.name if p.contractor else None, keyword_lower, keyword_no_accent)
+        ][:5]
 
         return Response({
             "contacts": ContactSerializer(contacts, many=True).data,
@@ -213,7 +244,7 @@ def global_search(request):
             "contractors": ContractorSerializer(contractors, many=True).data,
             "parkings": ParkingSerializer(parkings, many=True).data,
         })
+
     except Exception as e:
-        print("ERROR:", e)
         traceback.print_exc()
         return Response({"error": str(e)}, status=500)
