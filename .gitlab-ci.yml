@@ -6,7 +6,8 @@ stages:
 # ================================================== 
 backend-test: 
   stage: test 
-  tags: - shell 
+  tags: 
+    - shell 
   script: 
   - echo "===== BACKEND TEST START =====" 
   - | 
@@ -25,7 +26,8 @@ backend-test:
 # ================================================== 
 frontend-test: 
   stage: test 
-  tags: - shell 
+  tags: 
+    - shell 
   script: 
   - echo "===== FRONTEND TEST START =====" 
   - | 
