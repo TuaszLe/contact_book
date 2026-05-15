@@ -8,6 +8,8 @@ backend-test:
   stage: test 
   tags: 
     - danhba 
+  tags: 
+    - danhba
   script: 
     - echo "===== BACKEND TEST START =====" 
     - | 
