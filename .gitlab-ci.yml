@@ -1,0 +1,37 @@
+stages: 
+- test 
+- build 
+# ================================================== 
+# BACKEND TEST - Django 
+# ================================================== 
+backend-test: 
+  stage: test 
+  tags: - shell 
+  script: 
+  - echo "===== BACKEND TEST START =====" 
+  - | 
+    docker run --rm \
+      -v "$CI_PROJECT_DIR/backend:/app" \
+      -w /app \
+      python:3.12 \
+      sh -c "
+       pip install --upgrade pip && 
+       pip install -r requirements.txt && 
+       python manage.py check && 
+       python manage.py test " 
+    - echo "===== BACKEND TEST DONE =====" 
+# ================================================== 
+# FRONTEND TEST - React/Vite 
+# ================================================== 
+frontend-test: 
+  stage: test 
+  tags: - shell 
+  script: 
+  - echo "===== FRONTEND TEST START =====" 
+  - | 
+    docker run --rm \
+      -v "$CI_PROJECT_DIR/frontend:/app" \
+      -w /app \
+      node:20 \
+      sh -c " npm install && npm run test -- --run " 
+    - echo "===== FRONTEND TEST DONE =====" 
