@@ -1,41 +1,33 @@
-stages: 
-  - test 
-  - build 
-# ================================================== 
-# BACKEND TEST - Django 
-# ================================================== 
-backend-test: 
-  stage: test 
-  tags: 
-    - danhba 
-  tags: 
-    - danhba
-  script: 
-    - echo "===== BACKEND TEST START =====" 
-    - | 
-      docker run --rm \
-        -v "$CI_PROJECT_DIR/backend:/app" \
-        -w /app \
-        python:3.12 \
-        sh -c "
-          pip install --upgrade pip && 
-          pip install -r requirements.txt && 
-          python manage.py check && 
-          python manage.py test " 
-    - echo "===== BACKEND TEST DONE =====" 
-# ================================================== 
-# FRONTEND TEST - React/Vite 
-# ================================================== 
-frontend-test: 
-  stage: test 
-  tags: 
-    - danhba 
-  script: 
-  - echo "===== FRONTEND TEST START =====" 
-  - | 
-    docker run --rm \
-      -v "$CI_PROJECT_DIR/frontend:/app" \
-      -w /app \
-      node:20 \
-      sh -c " npm install && npm run test -- --run " 
-  - echo "===== FRONTEND TEST DONE =====" 
+stages:
+ - build
+ - deploy
+
+build:
+ stage: build
+ tags:
+  - danhba
+ variables:
+  GIT_STRATEGY: clone
+ script:
+    - echo " Building the docker image"
+    - echo " Building the backend image"
+    - cd backend/
+    - docker build -t danhba-backend:lastest .
+    - cd ..
+    - echo " Building the frontend images"
+    - cd frontend/
+    - docker build -t danhba-frontend:lastest .
+    - echo " Done building the docker images"
+deploy:
+ stage: deploy
+ tags:
+  - danhba
+ variables:
+  GIT_STRATEGY: none
+ script:
+    - echo " Deploying the docker images"
+    - echo " Deploying the backend image"
+    - docker run -d --name danhba-backend -p 8059:8059 danhba-backend:lastest
+    - echo " Deploying the frontend image"
+    - docker run -d --name danhba-frontend -p 80:80 danhba-frontend:lastest
+    - echo " Done deploying the docker images"
