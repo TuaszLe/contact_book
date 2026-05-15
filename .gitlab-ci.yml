@@ -7,7 +7,7 @@ stages:
 backend-test: 
   stage: test 
   tags: 
-    - shell 
+    - danhba
   script: 
   - echo "===== BACKEND TEST START =====" 
   - | 
@@ -27,7 +27,7 @@ backend-test:
 frontend-test: 
   stage: test 
   tags: 
-    - shell 
+    - danhba
   script: 
   - echo "===== FRONTEND TEST START =====" 
   - | 
