@@ -27,10 +27,10 @@ deploy:
   GIT_STRATEGY: none
  script:
     - echo " Deleting the old docker containers"
-    - docker stop danhba_backend || true
-    - docker rm danhba_backend || true
-    - docker stop danhba_frontend || true
-    - docker rm danhba_frontend || true
+    - docker stop danhba-backend || true
+    - docker rm danhba-backend || true
+    - docker stop danhba-frontend || true
+    - docker rm danhba-frontend || true
     - echo " Deploying the docker images"
     - echo " Deploying the backend image"
     - docker run -d --name danhba-backend --restart=always -p 8059:8059 danhba-backend:lastest
