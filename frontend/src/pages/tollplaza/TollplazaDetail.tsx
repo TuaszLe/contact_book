@@ -135,7 +135,7 @@ export default function TollplazaDetail() {
             bordered
           />
         ) : (
-          <Empty description="Chưa có kênh thu phí" />
+          <Empty description="Chưa có kênh truyền" />
         )}
       </Card>
 
