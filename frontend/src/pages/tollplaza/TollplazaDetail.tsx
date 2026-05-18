@@ -105,8 +105,8 @@ export default function TollplazaDetail() {
         </Descriptions>
       </Card>
 
-      {/* Thông tin kênh thu phí */}
-      <Card title="Kênh Thu Phí" style={{ marginBottom: 24 }}>
+      {/* Thông tin kênh truyền */}
+      <Card title="Kênh truyền" style={{ marginBottom: 24 }}>
         {tollplaza.channel_codes && tollplaza.channel_codes.length > 0 ? (
           <Table
             rowKey={(record) => `${record.code}-${record.name}`}
