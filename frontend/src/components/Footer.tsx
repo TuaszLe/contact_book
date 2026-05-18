@@ -11,7 +11,7 @@ export default function Footer(){
       alignItems:"center"
     }}>
 
-      © 2026 Create By TriBM
+      © 2026 Created By TriBM
 
     </div>
 
