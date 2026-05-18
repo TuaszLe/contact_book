@@ -13,11 +13,11 @@ class Contact(models.Model):
         ('office', 'Office'),
     )
 
-    firstname = models.CharField(max_length=255)
+    firstname = models.CharField(max_length=255, null = True, blank=True)
     lastname = models.CharField(max_length=255)
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=50, null=True, blank=True)
-
+    contact_type = models.CharField(max_length=20, choices=CONTACT_TYPE_CHOICES, default="tollplaza")
     title = models.ForeignKey(Titles, on_delete=models.SET_NULL, null=True, blank=True)
 
     tollplazas = models.ManyToManyField(Tollplaza, blank=True)
