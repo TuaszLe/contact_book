@@ -13,8 +13,8 @@ class Contact(models.Model):
         ('office', 'Office'),
     )
 
-    firstname = models.CharField(max_length=255, null = True, blank=True, verbose_name="Tên")
-    lastname = models.CharField(max_length=255, verbose_name="Họ")
+    firstname = models.CharField(max_length=255, verbose_name="Tên")
+    lastname = models.CharField(max_length=255, null = True, blank=True, verbose_name="Họ")
     email = models.EmailField(null=True, blank=True)
     phone = models.CharField(max_length=50, null=True, blank=True)
     contact_type = models.CharField(max_length=20, choices=CONTACT_TYPE_CHOICES, default="tollplaza")
