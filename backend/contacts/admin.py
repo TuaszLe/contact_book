@@ -31,33 +31,8 @@ class ContactAdmin(admin.ModelAdmin):
     search_fields = ('firstname', 'lastname', 'email', 'phone')
     autocomplete_fields = ['title']
     ordering = ( 'firstname','lastname',)
-    @admin.display(description='Họ')
-    def firstname(self, obj):
-        return obj.firstname
-
-    @admin.display(description='Tên')
-    def lastname(self, obj):
-        return obj.lastname
-
-    @admin.display(description='Email')
-    def email(self, obj):
-        return obj.email
-
-    @admin.display(description='Số điện thoại')
-    def phone(self, obj):
-        return obj.phone
-
-    @admin.display(description='Chức vụ')
-    def title(self, obj):
-        return obj.title
-
-    @admin.display(description='Loại liên hệ')
-    def contact_type(self, obj):
-        return obj.get_contact_type_display()
-
-    @admin.display(description='Trạng thái')
-    def status(self, obj):
-        return 'Hoạt động' if obj.status == 1 else 'Ngừng hoạt động'
+    class Media:
+        js = ('admin/js/contact_dynamic.js',)
 
 class ContractorAdmin(admin.ModelAdmin):
     list_display = ('name', 'description', 'status')
