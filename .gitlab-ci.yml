@@ -1,0 +1,7 @@
+stages:
+   - build
+
+build_backend:
+  stage: build
+  script:
+    - echo "Building backend..."
