@@ -6,7 +6,7 @@ stages:
 build:
  stage: build
  tags:
-  - danhba
+  - noc_runner
  variables:
   GIT_STRATEGY: clone
  script:
@@ -22,7 +22,7 @@ build:
 deploy:
  stage: deploy
  tags:
-  - danhba
+  - noc_runner
  variables:
   GIT_STRATEGY: none
  script:
