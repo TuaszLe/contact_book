@@ -37,3 +37,5 @@ deploy:
     - echo " Deploying the frontend image"
     - docker run -d --name danhba-frontend --restart=always -p 80:80 danhba-frontend:lastest
     - echo " Done deploying the docker images"
+
+#aaa
