@@ -1,7 +1,39 @@
+#V1.0S
 stages:
-  - build
+ - build
+ - deploy
 
 build:
-  stage: build
-  script:
-    - echo "Runner is working"
+ stage: build
+ tags:
+  - danhba
+ variables:
+  GIT_STRATEGY: clone
+ script:
+    - echo " Building the docker image"
+    - echo " Building the backend image"
+    - cd backend/
+    - docker build -t danhba-backend:lastest .
+    - cd ..
+    - echo " Building the frontend images"
+    - cd frontend/
+    - docker build -t danhba-frontend:lastest .
+    - echo " Done building the docker images"
+deploy:
+ stage: deploy
+ tags:
+  - danhba
+ variables:
+  GIT_STRATEGY: none
+ script:
+    - echo " Deleting the old docker containers"
+    - docker stop danhba-backend || true
+    - docker rm danhba-backend || true
+    - docker stop danhba-frontend || true
+    - docker rm danhba-frontend || true
+    - echo " Deploying the docker images"
+    - echo " Deploying the backend image"
+    - docker run -d --name danhba-backend --restart=always -p 8059:8059 danhba-backend:lastest
+    - echo " Deploying the frontend image"
+    - docker run -d --name danhba-frontend --restart=always -p 80:80 danhba-frontend:lastest
+    - echo " Done deploying the docker images"
