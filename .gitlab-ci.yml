@@ -13,20 +13,20 @@ build:
  variables:
   GIT_STRATEGY: clone
  script:
-    - echo "============================
+    - echo "============================"
     - echo "Building the backend image"
     - echo "============================"
     - cd backend/
     - docker build -t $BACKEND_IMAGE:$CI_PIPELINE_ID .
     - docker tag $BACKEND_IMAGE:$CI_PIPELINE_ID $BACKEND_IMAGE:latest
     - cd ..
-    - echo "============================
+    - echo "============================"
     - echo "Building the frontend image"
     - echo "============================"
     - cd frontend/
     - docker build -t $FRONTEND_IMAGE:$CI_PIPELINE_ID .
     - docker tag $FRONTEND_IMAGE:$CI_PIPELINE_ID $FRONTEND_IMAGE:latest
-    - echo "============================
+    - echo "============================"
     - echo "Cleaning old docker images"
     - echo "============================"
     - |
