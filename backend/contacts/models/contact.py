@@ -31,10 +31,13 @@ class Contact(models.Model):
 
     def clean(self):
         if self.contact_type == 'tollplaza' and self.title:
-            raise ValidationError("TollPlaza contact không được có Office")
+            raise ValidationError("TollPlaza contact không được thuộc parking hoặc office")
 
         if self.contact_type == 'parking' and self.title:
-            raise ValidationError("Parking contact không được có Office")
+            raise ValidationError("Parking contact không được có tollplaza hoặc office")
+        
+        if self.contact_type == 'office' and self.title:
+            raise ValidationError("Office contact không được có tollplaza hoặc parking")
 
     def __str__(self):
         return f"{self.firstname} {self.lastname}"
