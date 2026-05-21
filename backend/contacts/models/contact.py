@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from .title import Titles
 from .tollplaza import Tollplaza
+from .office import Office
 from .parking import Parking
 
 
@@ -22,6 +23,7 @@ class Contact(models.Model):
 
     tollplazas = models.ManyToManyField(Tollplaza, blank=True)
     parkings = models.ManyToManyField(Parking, blank=True)
+    Offices = models.ManyToManyField(Office, blank=True)
 
     status = models.SmallIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
