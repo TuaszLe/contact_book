@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (labelText.includes('Tollplazas') || labelText.includes('tollplaza')) {
                 row.style.display = (value.includes('toll')) ? 'table-row' : 'none';
-                console.log(`Tollplazas → ${row.style.display}`);
+                console.log(`Tollplazas → ${row.style.display} aaaaa`);
             }
 
             if (labelText.includes('Parkings') || labelText.includes('parking')) {
