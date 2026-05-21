@@ -22,16 +22,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
             if (labelText.includes('Tollplazas') || labelText.includes('tollplaza')) {
                 row.style.display = (value.includes('toll')) ? 'table-row' : 'none';
-                console.log(`Tollplazas → ${row.style.display} aaaaa`);
+                console.log(`Tollplazas → ${row.style.display}`);
             }
 
             if (labelText.includes('Parkings') || labelText.includes('parking')) {
                 row.style.display = (value.includes('park')) ? 'table-row' : 'none';
                 console.log(`Parkings → ${row.style.display}`);
             }
+
             if (labelText.includes('Offices') || labelText.includes('office')) {
                 row.style.display = (value.includes('office')) ? 'table-row' : 'none';
                 console.log(`Offices → ${row.style.display}`);
+            }
+            if (labelText.includes('Parkings') || labelText.includes('parking')) {
+                row.style.display = (value.includes('park')) ? 'table-row' : 'none';
+                console.log(`Parkings → ${row.style.display}`);
             }
         });
     }
