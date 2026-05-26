@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'danhba',
+        'NAME': 'danhba_new',
         'USER': 'tribm',
         'PASSWORD': '123456',
         'HOST': '10.6.69.41',
