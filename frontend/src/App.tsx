@@ -11,6 +11,8 @@ import ParkingDetail from "./pages/parking/ParkingDetail";
 import Lich_bao_tri from "./pages/sharepoint/Lich_bao_tri";
 import So from "./pages/sharepoint/So";
 import SearchPage from "./pages/searchpage";
+import OfficeDetail from "./pages/office/OfficeDetail";
+import Office from "./pages/office/Office";
 
 function App(){
 
@@ -31,6 +33,8 @@ function App(){
       <Route path="/mtnc" element={<Lich_bao_tri />} />
       <Route path="/so" element={<So />} />
       <Route path="/search" element={<SearchPage />} />
+      <Route path="/office" element={<Office />} />
+      <Route path="/office/:id" element={<OfficeDetail />} /> 
     </Routes>
 
    </AppLayout>

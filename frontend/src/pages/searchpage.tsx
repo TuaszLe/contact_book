@@ -6,7 +6,7 @@ import api from "../services/api";
 
 type Contact = {
   id: number;
-  firstname: string;
+  fullname: string;
   phone: string;
 };
 
@@ -82,8 +82,8 @@ export default function SearchPage() {
             result.parkings.length;
 
           if (total === 1) {
-            if (result.contacts.length === 1)
-              return navigate(`/contact/${result.contacts[0].id}`);
+            // if (result.contacts.length === 1)
+            //   return navigate(`/contact/${result.contacts[0].id}`);
 
             if (result.tollplazas.length === 1)
               return navigate(`/tollplaza/${result.tollplazas[0].id}`);
@@ -151,7 +151,7 @@ export default function SearchPage() {
               onClick={() => navigate(`/contact/${item.id}`)}
               style={{ cursor: "pointer", padding: 5 }}
             >
-              {item.firstname} - {item.phone}
+              {item.fullname} - {item.phone}
             </div>
           ))}
         </>

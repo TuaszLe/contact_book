@@ -5,13 +5,14 @@ from django.shortcuts import get_object_or_404
 import traceback
 import unicodedata
 
-from .models import Contact, Tollplaza, Contractor, Project, Parking
+from .models import Contact, Tollplaza, Contractor, Project, Parking, Office
 from .serializers import (
     ContactSerializer,
     TollplazaSerializer,
     ContractorSerializer,
     ProjectSerializer,
-    ParkingSerializer
+    ParkingSerializer,
+    OfficeSerializer,
 )
 
 
@@ -128,7 +129,7 @@ def tollplaza_detail_api(request, pk):
         pk=pk
     )
 
-    contacts = Contact.objects.filter(tollplaza_contact__tollplaza=tollplaza)
+    contacts = tollplaza.contacts.all()
 
     return Response({
         "tollplaza": TollplazaSerializer(tollplaza).data,
@@ -163,13 +164,33 @@ def parking_detail_api(request, pk):
         pk=pk
     )
 
-    contacts = Contact.objects.filter(parking_contact__parking=parking)
+    contacts = parking.contacts.all()
 
     return Response({
         "parking": ParkingSerializer(parking).data,
         "contacts": ContactSerializer(contacts, many=True).data
     })
 
+
+@api_view(["GET"])
+def office_list_api(request):
+
+    queryset = Office.objects.all().order_by("name")
+
+    serializer = OfficeSerializer(queryset, many=True)
+
+    return Response(serializer.data)
+
+@api_view(["GET"])
+def office_detail_api(request, pk):
+
+    office = get_object_or_404(Office.objects.all(), pk=pk)
+    contacts = office.contacts.all()
+
+    return Response({
+        "office": OfficeSerializer(office).data,
+        "contacts": ContactSerializer(contacts, many=True).data
+    })
 
 @api_view(["GET"])
 def global_search(request):
@@ -193,10 +214,10 @@ def global_search(request):
         all_contacts = Contact.objects.select_related("title").all()
         contacts = [
             c for c in all_contacts
-            if m(c.firstname, keyword_lower, keyword_no_accent)
-            or m(c.lastname, keyword_lower, keyword_no_accent)
+            if m(c.fullname, keyword_lower, keyword_no_accent
+                )
             or m(c.phone, keyword_lower, keyword_no_accent)
-            or m(c.email, keyword_lower, keyword_no_accent)
+            # or m(c.email, keyword_lower, keyword_no_accent)
         ]
 
         # =========================
@@ -206,7 +227,7 @@ def global_search(request):
         tollplazas = [
             t for t in all_tollplazas
             if m(t.name, keyword_lower, keyword_no_accent)
-            or m(t.address, keyword_lower, keyword_no_accent)
+            # or m(t.address, keyword_lower, keyword_no_accent)
             or m(t.project.name if t.project else None, keyword_lower, keyword_no_accent)
         ]
 
@@ -233,7 +254,7 @@ def global_search(request):
         parkings = [
             p for p in all_parkings
             if m(p.name, keyword_lower, keyword_no_accent)
-            or m(p.address, keyword_lower, keyword_no_accent)
+            # or m(p.address, keyword_lower, keyword_no_accent)
             or m(p.contractor.name if p.contractor else None, keyword_lower, keyword_no_accent)
         ]
 

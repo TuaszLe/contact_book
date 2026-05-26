@@ -12,8 +12,8 @@ from .parking import Parking
 from .junction import (
     Tollplaza_channel,
     # Tollplaza_contractor,
-    Tollplaza_contact,
-    Parking_contact,
+    # Tollplaza_contact,
+    # Parking_contact,
 )
 
 # Alias for convenience

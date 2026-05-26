@@ -4,7 +4,7 @@ import { Card, Table, Descriptions, Tag, Spin, Empty } from "antd";
 import { getTollplazaDetail } from "../../services/api";
 interface Contact {
   id: number;
-  name: string;
+  fullname: string;
   phone: string;
   email: string;
 }
@@ -147,8 +147,8 @@ export default function TollplazaDetail() {
             columns={[
               {
                 title: "Họ Tên",
-                dataIndex: "name",
-                key: "name",
+                dataIndex: "fullname",
+                key: "fullname",
                 width: "30%",
               },
               {

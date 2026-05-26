@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Card, Table, Descriptions, Tag, Spin, Empty } from "antd";
-import { getParkingDetail } from "../../services/api";
-
+import { Card, Table, Descriptions, Spin, Empty } from "antd";
+import { getOfficeDetail } from "../../services/api";
 interface Contact {
   id: number;
   fullname: string;
@@ -10,37 +9,29 @@ interface Contact {
   email: string;
 }
 
-interface Parking {
+interface Office {
   id: number;
   name: string;
   description?: string;
-  address?: string;
-  contractor?: number;
-  contractor_name?: string;
-  type?: number;
-  type_name?: string;
-  lanes?: number;
   status?: number;
   created_at?: string;
   updated_at?: string;
 }
 
-export default function ParkingDetail() {
+export default function OfficeDetail() {
   const { id } = useParams();
 
-  const [parking, setParking] = useState<Parking | null>(null);
+  const [office, setOffice] = useState<Office | null>(null);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!id) return;
-
     const fetchData = async () => {
       try {
-        const data = await getParkingDetail(Number(id));
-        setParking(data.parking);
-        setContacts(data.contacts || []);
+        const data = await getOfficeDetail(Number(id));
+        setOffice(data.office);
+        setContacts(data.contacts);
         setError(null);
       } catch {
         setError("Không thể tải thông tin");
@@ -60,7 +51,7 @@ export default function ParkingDetail() {
     );
   }
 
-  if (error || !parking) {
+  if (error || !office) {
     return (
       <div style={{ padding: "24px" }}>
         <Empty description={error || "Không tìm thấy dữ liệu"} />
@@ -72,37 +63,21 @@ export default function ParkingDetail() {
     <div style={{ padding: "24px" }}>
       {/* Header */}
       <Card style={{ marginBottom: 24, backgroundColor: "#fafafa" }}>
-        <h1 style={{ margin: 0, fontSize: 28, fontWeight: 600, color: "#1890ff" }}>
-          {parking.name}
+        <h1
+          style={{ margin: 0, fontSize: 28, fontWeight: 600, color: "#1890ff" }}
+        >
+          {office.name}
         </h1>
       </Card>
 
       {/* Thông tin cơ bản */}
       <Card title="Thông tin cơ bản" style={{ marginBottom: 24 }}>
         <Descriptions bordered column={2} size="middle">
-          <Descriptions.Item label="Nhà Thầu" span={1}>
-            <Tag color="blue">{parking.contractor_name || "N/A"}</Tag>
-          </Descriptions.Item>
-          <Descriptions.Item label="Loại Bãi Đỗ" span={1}>
-            <Tag color="cyan">{parking.type_name || "N/A"}</Tag>
-          </Descriptions.Item>
-          <Descriptions.Item label="Số Làn" span={1}>
-            <Tag color="volcano">{parking.lanes}</Tag>
-          </Descriptions.Item>
-          <Descriptions.Item label="Trạng Thái" span={1}>
-            <Tag color={parking.status === 1 ? "green" : "red"}>
-              {parking.status === 1 ? "Hoạt động" : "Không hoạt động"}
-            </Tag>
-          </Descriptions.Item>
-          <Descriptions.Item label="Địa Chỉ" span={2}>
-            {parking.address || "Không có"}
-          </Descriptions.Item>
           <Descriptions.Item label="Mô Tả" span={2}>
-            {parking.description || "Không có mô tả"}
+            {office.description || "Không có mô tả"}
           </Descriptions.Item>
         </Descriptions>
       </Card>
-
       {/* Danh sách liên hệ */}
       <Card title="Danh Sách Liên Hệ" style={{ marginBottom: 24 }}>
         {contacts.length > 0 ? (
@@ -145,18 +120,13 @@ export default function ParkingDetail() {
       <Card size="small" style={{ backgroundColor: "#f0f2f5" }}>
         <Descriptions size="small" column={2}>
           <Descriptions.Item label="Ngày Tạo">
-            {new Date(parking.created_at || "").toLocaleDateString(
-              "vi-VN"
-            )}
+            {new Date(office.created_at || "").toLocaleDateString("vi-VN")}
           </Descriptions.Item>
           <Descriptions.Item label="Cập Nhật Cuối">
-            {new Date(parking.updated_at || "").toLocaleDateString(
-              "vi-VN"
-            )}
+            {new Date(office.updated_at || "").toLocaleDateString("vi-VN")}
           </Descriptions.Item>
         </Descriptions>
       </Card>
     </div>
   );
-
 }

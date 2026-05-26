@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API = "http://10.6.69.41:8059/api";
+/*const API = "http://10.6.69.41:8059/api";*/
+const API = "http://10.6.69.36:8059/api";
 
 const api = axios.create({
   baseURL: API,
@@ -25,11 +26,9 @@ export const getTollplaza = async (search = "") => {
 };
 
 export const getTollplazaDetail = async (id: number) => {
-
   const res = await axios.get(`${API}/tollplazas/${id}/`);
 
   return res.data;
-
 };
 
 /* Parking */
@@ -45,5 +44,17 @@ export const getParkingDetail = async (id: number) => {
   const res = await axios.get(`${API}/parkings/${id}/`);
   return res.data;
 };
+/* Office */
 
+export const getOffice = async (search = "") => {
+  const res = await api.get("/offices/", {
+    params: { search },
+  });
+  return res.data;
+};
+
+export const getOfficeDetail = async (id: number) => {
+  const res = await axios.get(`${API}/offices/${id}/`);
+  return res.data;
+};
 export default api;

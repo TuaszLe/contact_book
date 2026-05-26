@@ -109,6 +109,10 @@ class Contact(models.Model):
         fullname = f"{self.firstname} {self.lastname or ''}".strip()
 
         return fullname or f"Contact #{self.id}"
+    @property
+    def fullname(self):
+
+        return f"{self.firstname} {self.lastname or ''}".strip()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

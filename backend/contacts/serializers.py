@@ -6,6 +6,7 @@ from .models import (
     Contractor,
     Project,
     Title,
+    Office,
 )
 
 # =========================
@@ -29,10 +30,17 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = ["id", "name"]
 
-
 class TollplazaSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tollplaza
+        fields = ["id", "name"]
+class ParkingSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Parking
+        fields = ["id", "name"]
+class OfficeSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Office
         fields = ["id", "name"]
 
 
@@ -74,25 +82,89 @@ class TollplazaSerializer(serializers.ModelSerializer):
 
 
 class ContactSerializer(serializers.ModelSerializer):
-    # display name cho FK
-    title_name = serializers.CharField(source="title.name", read_only=True)
 
-    # many-to-many
-    tollplazas = TollplazaSimpleSerializer(many=True, read_only=True)
+    title_name = serializers.CharField(
+        source="title.name",
+        read_only=True
+    )
 
+    tollplazas = TollplazaSimpleSerializer(
+        many=True,
+        read_only=True
+    )
+
+    parkings = ParkingSimpleSerializer(
+        many=True,
+        read_only=True
+    )
+
+    offices = OfficeSimpleSerializer(
+        many=True,
+        read_only=True
+    )
+
+    contact_location_type = serializers.SerializerMethodField()
+    contact_location_name = serializers.SerializerMethodField()
+    fullname = serializers.SerializerMethodField()
     class Meta:
         model = Contact
         fields = [
             "id",
             "firstname",
             "lastname",
+            "fullname",
             "phone",
             "email",
             "status",
+
             "title",
             "title_name",
+
+            "contact_type",
+
+            "contact_location_type",
+            "contact_location_name",
+
             "tollplazas",
+            "parkings",
+            "offices",
         ]
+
+    def get_contact_location_type(self, obj):
+
+        if obj.contact_type == "tollplaza":
+            return "tollplaza"
+
+        elif obj.contact_type == "parking":
+            return "parking"
+
+        elif obj.contact_type == "office":
+            return "office"
+
+        return None
+
+    def get_contact_location_name(self, obj):
+
+        if obj.contact_type == "tollplaza":
+            return "; ".join(
+                obj.tollplazas.values_list("name", flat=True)
+        )
+
+        elif obj.contact_type == "parking":
+
+            return "; ".join(
+            obj.parkings.values_list("name", flat=True)
+        )
+
+        elif obj.contact_type == "office":
+            return ", ".join(
+            obj.offices.values_list("name", flat=True)
+        )
+
+        return None
+
+    def get_fullname(self, obj):
+        return f"{obj.lastname} {obj.firstname}"
 
 class ParkingSerializer(serializers.ModelSerializer):
     contractor_name = serializers.CharField(source='contractor.name', read_only=True)
@@ -110,6 +182,16 @@ class ParkingSerializer(serializers.ModelSerializer):
             "type",
             "type_name",
             "lanes",
+            "status",
+            "created_at",
+            "updated_at",
+        ]
+class OfficeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Office
+        fields = [
+            "id",
+            "name",
             "status",
             "created_at",
             "updated_at",

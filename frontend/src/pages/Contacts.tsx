@@ -1,16 +1,24 @@
 import { useEffect, useState } from "react";
 import { Table, Card } from "antd";
+import type { ColumnsType } from "antd/es/table";
 import { getContacts } from "../services/api";
 import { useSearchParams } from "react-router-dom";
 
 interface Contact {
   id: number;
-  first_name: string;
-  last_name: string;
+
+  firstname: string;
+  lastname: string;
+  fullname: string;
+
   phone: string;
   email: string;
+
   title_name?: string;
-  tollplazas?: Array<{ id: number; name: string }>;
+
+  contact_type?: string;
+
+  contact_location_name?: string;
 }
 
 export default function Contacts() {
@@ -18,6 +26,7 @@ export default function Contacts() {
   const [loading, setLoading] = useState(false);
 
   const [params] = useSearchParams();
+
   const search = params.get("search") || "";
 
   const fetchData = async (keyword = "") => {
@@ -25,6 +34,7 @@ export default function Contacts() {
 
     try {
       const data = await getContacts(keyword);
+
       setContacts(data);
     } finally {
       setLoading(false);
@@ -35,24 +45,41 @@ export default function Contacts() {
     fetchData(search);
   }, [search]);
 
-  const columns = [
+  const columns: ColumnsType<Contact> = [
     {
       title: "Họ tên",
-      dataIndex: "last_name" + " " + "first_name",
+      dataIndex: "fullname",
+      key: "fullname",
     },
+
     {
       title: "Điện thoại",
       dataIndex: "phone",
+      key: "phone",
     },
+
     {
       title: "Email",
       dataIndex: "email",
+      key: "email",
     },
+
     {
-      title: "Trạm thu phí",
-      dataIndex: "tollplazas",
-      render: (value: Contact["tollplazas"]) =>
-        Array.isArray(value) ? value.map((t) => t.name).join(", ") : "",
+      title: "Chức vụ",
+      dataIndex: "title_name",
+      key: "title_name",
+    },
+
+    {
+      title: "Đơn vị",
+      dataIndex: "contact_location_name",
+      key: "contact_location_name",
+    },
+
+    {
+      title: "Loại",
+      dataIndex: "contact_type",
+      key: "contact_type",
     },
   ];
 
