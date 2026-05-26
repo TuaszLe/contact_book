@@ -1,5 +1,7 @@
+from django import forms
 from django.contrib import admin
 from django.shortcuts import get_object_or_404
+
 from .models import (
     Title,
     Project,
@@ -10,6 +12,7 @@ from .models import (
     Type,
     Channel,
     Tollplaza_channel,
+    Office
 )
 
 
@@ -26,6 +29,28 @@ class TitleAdmin(admin.ModelAdmin):
 
 
 class ContactAdmin(admin.ModelAdmin):
+    class ContactAdminForm(forms.ModelForm):
+        class Meta:
+            model = Contact
+            fields = '__all__'
+
+        def clean(self):
+            cleaned_data = super().clean()
+            contact_type = cleaned_data.get('contact_type')
+
+            if contact_type == 'tollplaza':
+                cleaned_data['parkings'] = []
+                cleaned_data['offices'] = []
+            elif contact_type == 'parking':
+                cleaned_data['tollplazas'] = []
+                cleaned_data['offices'] = []
+            elif contact_type == 'office':
+                cleaned_data['tollplazas'] = []
+                cleaned_data['parkings'] = []
+
+            return cleaned_data
+
+    form = ContactAdminForm
     list_display = ('firstname', 'lastname', 'email', 'phone', 'title', 'contact_type', 'status')
     list_filter = ('title', 'contact_type', 'status')
     search_fields = ('firstname', 'lastname', 'email', 'phone')
@@ -54,9 +79,9 @@ class ProjectAdmin(admin.ModelAdmin):
     search_fields = ('name', 'description')
     ordering = ('name',)
 class OfficeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'address', 'status')
+    list_display = ('name', 'status')
     list_filter = ('status',)
-    search_fields = ('name', 'address')
+    search_fields = ('name',)
     ordering = ('name',)
 
 # ====================
@@ -105,6 +130,7 @@ admin.site.register(Project, ProjectAdmin)
 admin.site.register(Tollplaza, TollplazaAdmin)
 admin.site.register(Parking, ParkingAdmin)
 admin.site.register(Channel, ChannelAdmin)
+admin.site.register(Office, OfficeAdmin)
 
 # Junction tables - chỉ giữ Tollplaza_channel (có thêm field code)
 admin.site.register(Tollplaza_channel, TollplazaChannelAdmin)
