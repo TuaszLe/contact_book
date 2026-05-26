@@ -22,24 +22,22 @@ class Contact(models.Model):
         verbose_name="Loại liên hệ"
     )
 
-    title = models.ForeignKey('Titles', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Chức vụ")
+    title = models.ForeignKey('contacts.Titles', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Chức vụ")
 
     # ManyToMany relationships with explicit through tables
     tollplazas = models.ManyToManyField(
-        'Tollplaza',
+        'contacts.Tollplaza',
         blank=True,
         related_name='contacts',
-        through='Tollplaza_contact',
-        through_fields=('contact', 'tollplaza'),
+        through='contacts.Tollplaza_contact',
     )
     parkings = models.ManyToManyField(
-        'Parking',
+        'contacts.Parking',
         blank=True,
         related_name='contacts',
-        through='Parking_contact',
-        through_fields=('contact', 'parking'),
+        through='contacts.Parking_contact',
     )
-    offices = models.ManyToManyField('Office', blank=True, related_name='contacts')
+    offices = models.ManyToManyField('contacts.Office', blank=True, related_name='contacts')
 
     status = models.SmallIntegerField(default=1, verbose_name="Trạng thái")
     created_at = models.DateTimeField(auto_now_add=True)
