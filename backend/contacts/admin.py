@@ -53,7 +53,11 @@ class ProjectAdmin(admin.ModelAdmin):
     list_filter = ('status',)
     search_fields = ('name', 'description')
     ordering = ('name',)
-
+class OfficeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'address', 'status')
+    list_filter = ('status',)
+    search_fields = ('name', 'address')
+    ordering = ('name',)
 
 # ====================
 # BUSINESS ENTITIES
