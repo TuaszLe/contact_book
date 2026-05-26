@@ -6,6 +6,7 @@ from .type import Type
 from .channel import Channel
 from .title import Titles
 from .contact import Contact
+from .office import Office
 from .tollplaza import Tollplaza
 from .parking import Parking
 from .junction import (
