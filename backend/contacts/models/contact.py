@@ -1,9 +1,5 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from .title import Titles
-from .tollplaza import Tollplaza
-from .office import Office
-from .parking import Parking
 
 
 class Contact(models.Model):
@@ -28,29 +24,46 @@ class Contact(models.Model):
 
     title = models.ForeignKey('Titles', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Chức vụ")
 
-    # ManyToMany relationships
-    tollplazas = models.ManyToManyField('Tollplaza', blank=True, related_name='contacts')
-    parkings = models.ManyToManyField('Parking', blank=True, related_name='contacts')
+    # ManyToMany relationships with explicit through tables
+    tollplazas = models.ManyToManyField(
+        'Tollplaza',
+        blank=True,
+        related_name='contacts',
+        through='Tollplaza_contact',
+        through_fields=('contact', 'tollplaza'),
+    )
+    parkings = models.ManyToManyField(
+        'Parking',
+        blank=True,
+        related_name='contacts',
+        through='Parking_contact',
+        through_fields=('contact', 'parking'),
+    )
     offices = models.ManyToManyField('Office', blank=True, related_name='contacts')
 
     status = models.SmallIntegerField(default=1, verbose_name="Trạng thái")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def _m2m_has_values(self, field_name):
+        if hasattr(self, '_prefetched_objects_cache') and field_name in self._prefetched_objects_cache:
+            return bool(self._prefetched_objects_cache[field_name])
+        return getattr(self, field_name).exists()
+
     def clean(self):
         """Kiểm tra logic khi lưu"""
         errors = {}
 
         if self.contact_type == 'tollplaza':
-            if self.parkings.exists() or self.offices.exists():
+            if self._m2m_has_values('parkings') or self._m2m_has_values('offices'):
                 errors['contact_type'] = "Contact TollPlaza không được liên kết với Parking hoặc Office."
 
         elif self.contact_type == 'parking':
-            if self.tollplazas.exists() or self.offices.exists():
+            if self._m2m_has_values('tollplazas') or self._m2m_has_values('offices'):
                 errors['contact_type'] = "Contact Parking không được liên kết với TollPlaza hoặc Office."
 
         elif self.contact_type == 'office':
-            if self.tollplazas.exists() or self.parkings.exists():
+            if self._m2m_has_values('tollplazas') or self._m2m_has_values('parkings'):
                 errors['contact_type'] = "Contact Office không được liên kết với TollPlaza hoặc Parking."
 
         if errors:
