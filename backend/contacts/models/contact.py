@@ -7,7 +7,6 @@ from .parking import Parking
 
 
 class Contact(models.Model):
-
     CONTACT_TYPE_CHOICES = (
         ('tollplaza', 'TollPlaza'),
         ('parking', 'Parking'),
@@ -15,32 +14,68 @@ class Contact(models.Model):
     )
 
     firstname = models.CharField(max_length=255, verbose_name="Tên")
-    lastname = models.CharField(max_length=255, null = True, blank=True, verbose_name="Họ")
-    email = models.EmailField(null=True, blank=True)
-    phone = models.CharField(max_length=50, null=True, blank=True)
-    contact_type = models.CharField(max_length=20, choices=CONTACT_TYPE_CHOICES, default="tollplaza")
-    title = models.ForeignKey(Titles, on_delete=models.SET_NULL, null=True, blank=True)
+    lastname = models.CharField(max_length=255, null=True, blank=True, verbose_name="Họ")
+    
+    email = models.EmailField(null=True, blank=True, verbose_name="Email")
+    phone = models.CharField(max_length=50, null=True, blank=True, verbose_name="Số điện thoại")
+    
+    contact_type = models.CharField(
+        max_length=20, 
+        choices=CONTACT_TYPE_CHOICES, 
+        default='tollplaza',
+        verbose_name="Loại liên hệ"
+    )
 
-    tollplazas = models.ManyToManyField(Tollplaza, blank=True)
-    parkings = models.ManyToManyField(Parking, blank=True)
-    Offices = models.ManyToManyField(Office, blank=True)
+    title = models.ForeignKey('Titles', on_delete=models.SET_NULL, null=True, blank=True, verbose_name="Chức vụ")
 
-    status = models.SmallIntegerField(default=1)
+    # ManyToMany relationships
+    tollplazas = models.ManyToManyField('Tollplaza', blank=True, related_name='contacts')
+    parkings = models.ManyToManyField('Parking', blank=True, related_name='contacts')
+    offices = models.ManyToManyField('Office', blank=True, related_name='contacts')
+
+    status = models.SmallIntegerField(default=1, verbose_name="Trạng thái")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def clean(self):
-        if self.contact_type == 'tollplaza' and self.title:
-            raise ValidationError("TollPlaza contact không được thuộc parking hoặc office")
+        """Kiểm tra logic khi lưu"""
+        errors = {}
 
-        if self.contact_type == 'parking' and self.title:
-            raise ValidationError("Parking contact không được có tollplaza hoặc office")
-        
-        if self.contact_type == 'office' and self.title:
-            raise ValidationError("Office contact không được có tollplaza hoặc parking")
+        if self.contact_type == 'tollplaza':
+            if self.parkings.exists() or self.offices.exists():
+                errors['contact_type'] = "Contact TollPlaza không được liên kết với Parking hoặc Office."
+
+        elif self.contact_type == 'parking':
+            if self.tollplazas.exists() or self.offices.exists():
+                errors['contact_type'] = "Contact Parking không được liên kết với TollPlaza hoặc Office."
+
+        elif self.contact_type == 'office':
+            if self.tollplazas.exists() or self.parkings.exists():
+                errors['contact_type'] = "Contact Office không được liên kết với TollPlaza hoặc Parking."
+
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        """Tự động xóa liên kết không phù hợp khi thay đổi contact_type"""
+        if self.pk:  # Chỉ áp dụng khi update (đã tồn tại)
+            if self.contact_type == 'tollplaza':
+                self.parkings.clear()
+                self.offices.clear()
+            elif self.contact_type == 'parking':
+                self.tollplazas.clear()
+                self.offices.clear()
+            elif self.contact_type == 'office':
+                self.tollplazas.clear()
+                self.parkings.clear()
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.firstname} {self.lastname}"
+        return f"{self.firstname} {self.lastname or ''}".strip() or f"Contact #{self.id}"
 
     class Meta:
         db_table = 'contacts'
+        verbose_name = "Contact"
+        verbose_name_plural = "Contacts"
+        ordering = ['firstname', 'lastname']

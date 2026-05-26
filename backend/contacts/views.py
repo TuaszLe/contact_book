@@ -197,7 +197,7 @@ def global_search(request):
             or m(c.lastname, keyword_lower, keyword_no_accent)
             or m(c.phone, keyword_lower, keyword_no_accent)
             or m(c.email, keyword_lower, keyword_no_accent)
-        ][:5]
+        ]
 
         # =========================
         # TOLLPLAZA
@@ -208,7 +208,7 @@ def global_search(request):
             if m(t.name, keyword_lower, keyword_no_accent)
             or m(t.address, keyword_lower, keyword_no_accent)
             or m(t.project.name if t.project else None, keyword_lower, keyword_no_accent)
-        ][:5]
+        ]
 
         # =========================
         # PROJECT
@@ -216,7 +216,7 @@ def global_search(request):
         projects = [
             p for p in Project.objects.all()
             if m(p.name, keyword_lower, keyword_no_accent)
-        ][:5]
+        ]
 
         # =========================
         # CONTRACTOR
@@ -224,7 +224,7 @@ def global_search(request):
         contractors = [
             c for c in Contractor.objects.all()
             if m(c.name, keyword_lower, keyword_no_accent)
-        ][:5]
+        ]
 
         # =========================
         # PARKING
@@ -235,7 +235,7 @@ def global_search(request):
             if m(p.name, keyword_lower, keyword_no_accent)
             or m(p.address, keyword_lower, keyword_no_accent)
             or m(p.contractor.name if p.contractor else None, keyword_lower, keyword_no_accent)
-        ][:5]
+        ]
 
         return Response({
             "contacts": ContactSerializer(contacts, many=True).data,
