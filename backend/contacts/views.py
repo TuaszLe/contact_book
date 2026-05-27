@@ -214,10 +214,8 @@ def global_search(request):
         all_contacts = Contact.objects.select_related("title").all()
         contacts = [
             c for c in all_contacts
-            if m(c.fullname, keyword_lower, keyword_no_accent
-                )
+            if m(c.fullname, keyword_lower, keyword_no_accent)
             or m(c.phone, keyword_lower, keyword_no_accent)
-            # or m(c.email, keyword_lower, keyword_no_accent)
         ]
 
         # =========================
