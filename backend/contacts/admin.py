@@ -49,6 +49,13 @@ class ContactAdmin(admin.ModelAdmin):
                 cleaned_data['parkings'] = []
 
             return cleaned_data
+        def clean_phone(self):
+            phone = self.cleaned_data.get("phone")
+
+            if phone and Contact.objects.filter(phone=phone).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError("Số điện thoại đã tồn tại")
+
+            return phone
 
     form = ContactAdminForm
     list_display = ('firstname', 'lastname', 'email', 'phone', 'title', 'contact_type', 'status')

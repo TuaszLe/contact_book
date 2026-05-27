@@ -1,5 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 
 from .title import Titles
 from .tollplaza import Tollplaza
@@ -37,8 +38,17 @@ class Contact(models.Model):
         max_length=50,
         null=True,
         blank=True,
+        unique=True,
         verbose_name="Số điện thoại"
     )
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['phone'],
+                name='unique_phone',
+                condition=Q(phone__isnull=False)
+            )
+        ]
 
     contact_type = models.CharField(
         max_length=20,
