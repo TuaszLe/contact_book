@@ -96,19 +96,25 @@ class OfficeAdmin(admin.ModelAdmin):
 # ====================
 
 class TollplazaAdmin(admin.ModelAdmin):
+    class TollplazaAdminForm(forms.ModelForm):
+
+        class Meta:
+            model = Tollplaza
+            fields = "__all__"
+
+        def clean_name(self):
+            name = self.cleaned_data.get("name")
+
+            if name and Tollplaza.objects.filter(name=name).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError("TollPlaza đã tồn tại")
+
+            return name
+    form = TollplazaAdminForm
     list_display = ('name', 'address', 'project', 'type', 'lanes', 'status')
     list_filter = ('project', 'type', 'status')
     search_fields = ('name', 'address', 'description')
     autocomplete_fields = ('project', 'type', 'contractor')
     ordering = ('name',)
-    def clean_tollplaza(self):
-            Tollplaza = self.cleaned_data.get("name")
-
-            if Tollplaza and Tollplaza.objects.filter(name=Tollplaza).exclude(pk=self.instance.pk).exists():
-                raise forms.ValidationError("TollPlaza đã tồn tại")
-
-            return Tollplaza
-
 
 class ParkingAdmin(admin.ModelAdmin):
     list_display = ('name', 'address', 'contractor', 'type', 'lanes', 'status')
