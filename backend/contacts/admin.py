@@ -61,8 +61,9 @@ class ContactAdmin(admin.ModelAdmin):
     list_display = ('firstname', 'lastname', 'email', 'phone', 'title', 'contact_type', 'status')
     list_filter = ('title', 'contact_type', 'status')
     search_fields = ('firstname', 'lastname', 'email', 'phone')
-    autocomplete_fields = ['title']
+    autocomplete_fields = ['title', 'tollplazas', 'parkings', 'offices']
     ordering = ( 'firstname','lastname',)
+    search_fields = ('name',)
     class Media:
         js = ('admin/js/contact_dynamic.js',)
 

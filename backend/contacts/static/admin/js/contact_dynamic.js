@@ -1,43 +1,45 @@
 document.addEventListener("DOMContentLoaded", function () {
-  console.log("✅ JS Dynamic v5 - Brute force");
+  console.log("✅ Dynamic Contact Fields");
 
   const typeField = document.getElementById("id_contact_type");
+
   if (!typeField) return;
 
-  function getAllFormRows() {
-    return document.querySelectorAll(".form-row");
+  // =====================================================
+  // FIELD ROWS
+  // =====================================================
+
+  const tollRow = document.querySelector(".field-tollplazas");
+  const parkingRow = document.querySelector(".field-parkings");
+  const officeRow = document.querySelector(".field-offices");
+
+  function hideAll() {
+    if (tollRow) tollRow.style.display = "none";
+    if (parkingRow) parkingRow.style.display = "none";
+    if (officeRow) officeRow.style.display = "none";
   }
 
   function toggleFields() {
-    const value = typeField.value.toLowerCase().trim();
-    console.log("Current value:", value);
+    const value = typeField.value;
 
-    const rows = getAllFormRows();
+    hideAll();
 
-    rows.forEach((row) => {
-      const label = row.querySelector("label");
-      if (!label) return;
+    if (value === "tollplaza") {
+      if (tollRow) tollRow.style.display = "";
+    } else if (value === "parking") {
+      if (parkingRow) parkingRow.style.display = "";
+    } else if (value === "office") {
+      if (officeRow) officeRow.style.display = "";
+    }
 
-      const labelText = label.textContent.trim();
-
-      if (labelText.includes("Tollplazas") || labelText.includes("tollplaza")) {
-        row.style.display = value.includes("toll") ? "table-row" : "none";
-        console.log(`Tollplazas → ${row.style.display}`);
-      }
-
-      if (labelText.includes("Parkings") || labelText.includes("parking")) {
-        row.style.display = value.includes("park") ? "table-row" : "none";
-        console.log(`Parkings → ${row.style.display}`);
-      }
-
-      if (labelText.includes("Offices") || labelText.includes("office")) {
-        row.style.display = value.includes("office") ? "table-row" : "none";
-        console.log(`Offices → ${row.style.display}`);
-      }
-    });
+    //console.log("Current type:", value);
   }
 
-  // Chạy ngay khi load
-  setTimeout(toggleFields, 300); // delay một chút cho form load xong
+  // =====================================================
+  // INIT
+  // =====================================================
+
+  toggleFields();
+
   typeField.addEventListener("change", toggleFields);
 });
