@@ -101,6 +101,13 @@ class TollplazaAdmin(admin.ModelAdmin):
     search_fields = ('name', 'address', 'description')
     autocomplete_fields = ('project', 'type', 'contractor')
     ordering = ('name',)
+    def clean_tollplaza(self):
+            Tollplaza = self.cleaned_data.get("name")
+
+            if Tollplaza and Tollplaza.objects.filter(name=Tollplaza).exclude(pk=self.instance.pk).exists():
+                raise forms.ValidationError("TollPlaza đã tồn tại")
+
+            return Tollplaza
 
 
 class ParkingAdmin(admin.ModelAdmin):
