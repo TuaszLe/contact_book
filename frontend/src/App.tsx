@@ -13,6 +13,8 @@ import So from "./pages/sharepoint/So";
 import SearchPage from "./pages/searchpage";
 import OfficeDetail from "./pages/office/OfficeDetail";
 import Office from "./pages/office/Office";
+import Ds_truong_tuyen from "./pages/sharepoint/ds_truong_tuyen";
+import Xu_Ly_Lv_1 from "./pages/sharepoint/xu_ly_lv_1";
 
 function App() {
   return (
@@ -27,9 +29,11 @@ function App() {
           <Route path="/parking/:id" element={<ParkingDetail />} />
           <Route path="/mtnc" element={<Lich_bao_tri />} />
           <Route path="/so" element={<So />} />
+          <Route path="/ds_truong_tuyen" element={<Ds_truong_tuyen />} />
           <Route path="/search" element={<SearchPage />} />
           <Route path="/office" element={<Office />} />
           <Route path="/office/:id" element={<OfficeDetail />} />
+          <Route path="/xu_ly_lv_1" element={<Xu_Ly_Lv_1 />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>

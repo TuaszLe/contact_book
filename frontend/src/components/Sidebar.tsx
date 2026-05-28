@@ -54,6 +54,16 @@ export default function Sidebar({ collapsed }: Props) {
           icon: <PhoneOutlined />,
           label: <Link to="/so">Đầu mối cảnh báo</Link>,
         },
+        {
+          key: "8",
+          icon: <PhoneOutlined />,
+          label: <Link to="/ds_truong_tuyen">Danh sách trường tuyến</Link>,
+        },
+        {
+          key: "9",
+          icon: <PhoneOutlined />,
+          label: <Link to="/xu_ly_lv_1">Xử lý level 1</Link>,
+        },
       ]}
     />
   );
