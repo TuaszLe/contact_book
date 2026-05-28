@@ -57,7 +57,7 @@ export default function Sidebar({ collapsed }: Props) {
         {
           key: "8",
           icon: <PhoneOutlined />,
-          label: <Link to="/ds_truong_tuyen">Danh sách trường tuyến</Link>,
+          label: <Link to="/ds_truong_tuyen">DS trường tuyến</Link>,
         },
         {
           key: "9",
