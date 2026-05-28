@@ -70,7 +70,7 @@ deploy:
     - echo " Deploying the backend image"
     - docker run -d --name danhba-backend --restart=always -p 8059:8059 $BACKEND_IMAGE:latest
     - echo " Deploying the frontend image"
-    - docker run -d --name danhba-frontend --restart=always -p 80:80 $FRONTEND_IMAGE:latest
+    - docker run -d --name danhba-frontend --restart=always -p 80:80 -p 80:3000 $FRONTEND_IMAGE:latest
     
     - echo "============================"
     - echo "Deployment Completed"
