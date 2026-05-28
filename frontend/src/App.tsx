@@ -6,6 +6,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import Contacts from "./pages/contact/Contacts";
 import Tollplaza from "./pages/tollplaza/Tollplaza";
 import TollplazaDetail from "./pages/tollplaza/TollplazaDetail";
+import TollplazaMap from "./pages/map/TollplazaMap";
 import Parking from "./pages/parking/Parking";
 import ParkingDetail from "./pages/parking/ParkingDetail";
 import Lich_bao_tri from "./pages/sharepoint/Lich_bao_tri";
@@ -25,6 +26,7 @@ function App() {
           <Route path="/contacts" element={<Contacts />} />
           <Route path="/tollplaza" element={<Tollplaza />} />
           <Route path="/tollplaza/:id" element={<TollplazaDetail />} />
+          <Route path="/map" element={<TollplazaMap />} />
           <Route path="/parking" element={<Parking />} />
           <Route path="/parking/:id" element={<ParkingDetail />} />
           <Route path="/mtnc" element={<Lich_bao_tri />} />
