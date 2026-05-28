@@ -1,9 +1,9 @@
-import { BrowserRouter,Routes,Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import AppLayout from "./layouts/AppLayout";
 
-import Dashboard from "./pages/Dashboard";
-import Contacts from "./pages/Contacts";
+import Dashboard from "./pages/dashboard/Dashboard";
+import Contacts from "./pages/contact/Contacts";
 import Tollplaza from "./pages/tollplaza/Tollplaza";
 import TollplazaDetail from "./pages/tollplaza/TollplazaDetail";
 import Parking from "./pages/parking/Parking";
@@ -14,35 +14,26 @@ import SearchPage from "./pages/searchpage";
 import OfficeDetail from "./pages/office/OfficeDetail";
 import Office from "./pages/office/Office";
 
-function App(){
-
- return(
-
-  <BrowserRouter>
-
-   <AppLayout>
-
-    <Routes>
-
-      <Route path="/" element={<Dashboard/>}/>
-      <Route path="/contacts" element={<Contacts/>}/>
-      <Route path="/tollplaza" element={<Tollplaza />} />
-      <Route path="/tollplaza/:id" element={<TollplazaDetail />} />
-      <Route path="/parking" element={<Parking />} />
-      <Route path="/parking/:id" element={<ParkingDetail />} />
-      <Route path="/mtnc" element={<Lich_bao_tri />} />
-      <Route path="/so" element={<So />} />
-      <Route path="/search" element={<SearchPage />} />
-      <Route path="/office" element={<Office />} />
-      <Route path="/office/:id" element={<OfficeDetail />} /> 
-    </Routes>
-
-   </AppLayout>
-
-  </BrowserRouter>
-
- )
-
+function App() {
+  return (
+    <BrowserRouter>
+      <AppLayout>
+        <Routes>
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/contacts" element={<Contacts />} />
+          <Route path="/tollplaza" element={<Tollplaza />} />
+          <Route path="/tollplaza/:id" element={<TollplazaDetail />} />
+          <Route path="/parking" element={<Parking />} />
+          <Route path="/parking/:id" element={<ParkingDetail />} />
+          <Route path="/mtnc" element={<Lich_bao_tri />} />
+          <Route path="/so" element={<So />} />
+          <Route path="/search" element={<SearchPage />} />
+          <Route path="/office" element={<Office />} />
+          <Route path="/office/:id" element={<OfficeDetail />} />
+        </Routes>
+      </AppLayout>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
