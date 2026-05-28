@@ -19,7 +19,7 @@ interface Parking {
   updated_at?: string;
 }
 
-type FilterType = "all" | "bãi kín" | "bãi mở";
+type FilterType = "all" | "kín" | "mở";
 
 export default function Parking() {
 
@@ -45,10 +45,10 @@ export default function Parking() {
     fetchData(search);
   }, [search]);
 
-  // Lọc data theo type
+  // Lọc data theo type_name trả về từ API: "kín" hoặc "mở"
   const filteredData = data.filter((item) => {
     if (activeFilter === "all") return true;
-    return item.type_name?.toLowerCase() === activeFilter;
+    return item.type_name?.toLowerCase().trim() === activeFilter;
   });
 
   const columns = [
@@ -78,27 +78,27 @@ export default function Parking() {
             Tất cả
           </Button>
           <Button
-            type={activeFilter === "bãi kín" ? "primary" : "default"}
+            type={activeFilter === "kín" ? "primary" : "default"}
             style={{
-              backgroundColor: activeFilter === "bãi kín" ? "#7c3aed" : undefined,
-              borderColor: activeFilter === "bãi kín" ? "#7c3aed" : undefined,
-              color: activeFilter === "bãi kín" ? "white" : undefined,
+              backgroundColor: activeFilter === "kín" ? "#7c3aed" : undefined,
+              borderColor: activeFilter === "kín" ? "#7c3aed" : undefined,
+              color: activeFilter === "kín" ? "white" : undefined,
             }}
             onClick={() =>
-              setActiveFilter(activeFilter === "bãi kín" ? "all" : "bãi kín")
+              setActiveFilter(activeFilter === "kín" ? "all" : "kín")
             }
           >
             Bãi kín
           </Button>
           <Button
-            type={activeFilter === "bãi mở" ? "primary" : "default"}
+            type={activeFilter === "mở" ? "primary" : "default"}
             style={{
-              backgroundColor: activeFilter === "bãi mở" ? "#ea580c" : undefined,
-              borderColor: activeFilter === "bãi mở" ? "#ea580c" : undefined,
-              color: activeFilter === "bãi mở" ? "white" : undefined,
+              backgroundColor: activeFilter === "mở" ? "#ea580c" : undefined,
+              borderColor: activeFilter === "mở" ? "#ea580c" : undefined,
+              color: activeFilter === "mở" ? "white" : undefined,
             }}
             onClick={() =>
-              setActiveFilter(activeFilter === "bãi mở" ? "all" : "bãi mở")
+              setActiveFilter(activeFilter === "mở" ? "all" : "mở")
             }
           >
             Bãi mở
