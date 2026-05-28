@@ -15,6 +15,9 @@ urlpatterns = [
     # Parking
     path('parkings/', views.parking_list_api, name='parking_list_api'),
     path("parkings/<int:pk>/", views.parking_detail_api),
+    # Office
+    path('offices/', views.office_list_api, name='office_list_api'),
+    path("offices/<int:pk>/", views.office_detail_api),
     # Global Search
     path('search/', views.global_search, name='global_search'),
     

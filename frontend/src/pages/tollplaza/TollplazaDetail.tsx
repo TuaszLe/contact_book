@@ -4,7 +4,7 @@ import { Card, Table, Descriptions, Tag, Spin, Empty } from "antd";
 import { getTollplazaDetail } from "../../services/api";
 interface Contact {
   id: number;
-  name: string;
+  fullname: string;
   phone: string;
   email: string;
 }
@@ -105,8 +105,8 @@ export default function TollplazaDetail() {
         </Descriptions>
       </Card>
 
-      {/* Thông tin kênh thu phí */}
-      <Card title="Kênh Thu Phí" style={{ marginBottom: 24 }}>
+      {/* Thông tin kênh truyền */}
+      <Card title="Kênh truyền" style={{ marginBottom: 24 }}>
         {tollplaza.channel_codes && tollplaza.channel_codes.length > 0 ? (
           <Table
             rowKey={(record) => `${record.code}-${record.name}`}
@@ -135,7 +135,7 @@ export default function TollplazaDetail() {
             bordered
           />
         ) : (
-          <Empty description="Chưa có kênh thu phí" />
+          <Empty description="Chưa có kênh truyền" />
         )}
       </Card>
 
@@ -147,8 +147,8 @@ export default function TollplazaDetail() {
             columns={[
               {
                 title: "Họ Tên",
-                dataIndex: "name",
-                key: "name",
+                dataIndex: "fullname",
+                key: "fullname",
                 width: "30%",
               },
               {

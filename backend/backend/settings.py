@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+ki4=b2+yr2-d)7^pak!w9=a822!bbxq05*f%lw=rp8*lk6p_*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '10.6.69.41']
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOW_ALL_ORIGINS = True
 
@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'danhba',
+        'NAME': 'danhba_new',
         'USER': 'tribm',
         'PASSWORD': '123456',
         'HOST': '10.6.69.41',

@@ -1,9 +1,77 @@
 stages:
-   - build
+  - build
+  - deploy
 
-build_backend:
+variables:
+  BACKEND_IMAGE: "danhba-backend"
+  FRONTEND_IMAGE: "danhba-frontend"
+
+build:
   stage: build
   tags:
-      - danhba
+    - test
+  variables:
+    GIT_STRATEGY: clone
   script:
-    - echo "Building backend..."
+    - echo "============================"
+    - echo "Building the backend image"
+    - echo "============================"
+    - cd backend/
+    - docker build -t $BACKEND_IMAGE:$CI_PIPELINE_ID .
+    - docker tag $BACKEND_IMAGE:$CI_PIPELINE_ID $BACKEND_IMAGE:latest
+    - cd ..
+    - echo "============================"
+    - echo "Building the frontend image"
+    - echo "============================"
+    - cd frontend/
+    - docker build -t $FRONTEND_IMAGE:$CI_PIPELINE_ID .
+    - docker tag $FRONTEND_IMAGE:$CI_PIPELINE_ID $FRONTEND_IMAGE:latest
+    - echo "============================"
+    - echo "Cleaning old docker images"
+    - echo "============================"
+    - |
+      docker images $BACKEND_IMAGE --format "{{.Tag}}" \
+      | grep -v latest \
+      | sort -rn \
+      | tail -n +6 \
+      | xargs -r -I {} docker rmi $BACKEND_IMAGE:{}
+
+    # Keep only newest 5 frontend versions
+    - |
+      docker images $FRONTEND_IMAGE --format "{{.Tag}}" \
+      | grep -v latest \
+      | sort -rn \
+      | tail -n +6 \
+      | xargs -r -I {} docker rmi $FRONTEND_IMAGE:{}
+
+    - echo "Build Completed"
+
+deploy:
+  stage: deploy
+  tags:
+    - test
+  variables:
+    GIT_STRATEGY: none
+  script:
+    - echo "============================"
+    - echo "Stopping the old docker containers"
+    - echo "============================"
+
+    - docker stop danhba-backend || true
+    - docker rm danhba-backend || true
+
+    - docker stop danhba-frontend || true
+    - docker rm danhba-frontend || true
+
+    - echo "============================"
+    - echo " Deploying new containers"
+    - echo "============================"
+
+    - echo " Deploying the backend image"
+    - docker run -d --name danhba-backend --restart=always -p 8059:8059 $BACKEND_IMAGE:latest
+    - echo " Deploying the frontend image"
+    - docker run -d --name danhba-frontend --restart=always -p 80:80 -p 3000:80 $FRONTEND_IMAGE:latest
+
+    - echo "============================"
+    - echo "Deployment Completed"
+    - echo "============================"

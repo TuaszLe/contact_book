@@ -5,7 +5,7 @@ import { getParkingDetail } from "../../services/api";
 
 interface Contact {
   id: number;
-  name: string;
+  fullname: string;
   phone: string;
   email: string;
 }
@@ -111,8 +111,8 @@ export default function ParkingDetail() {
             columns={[
               {
                 title: "Họ Tên",
-                dataIndex: "name",
-                key: "name",
+                dataIndex: "fullname",
+                key: "fullname",
                 width: "30%",
               },
               {
