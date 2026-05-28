@@ -1,18 +1,18 @@
 stages:
- - build
- - deploy
+  - build
+  - deploy
 
 variables:
   BACKEND_IMAGE: "danhba-backend"
   FRONTEND_IMAGE: "danhba-frontend"
 
 build:
- stage: build
- tags:
-  - test
- variables:
-  GIT_STRATEGY: clone
- script:
+  stage: build
+  tags:
+    - test
+  variables:
+    GIT_STRATEGY: clone
+  script:
     - echo "============================"
     - echo "Building the backend image"
     - echo "============================"
@@ -47,16 +47,16 @@ build:
     - echo "Build Completed"
 
 deploy:
- stage: deploy
- tags:
-  - test
- variables:
-  GIT_STRATEGY: none
- script:
+  stage: deploy
+  tags:
+    - test
+  variables:
+    GIT_STRATEGY: none
+  script:
     - echo "============================"
     - echo "Stopping the old docker containers"
     - echo "============================"
-    
+
     - docker stop danhba-backend || true
     - docker rm danhba-backend || true
 
@@ -70,8 +70,8 @@ deploy:
     - echo " Deploying the backend image"
     - docker run -d --name danhba-backend --restart=always -p 8059:8059 $BACKEND_IMAGE:latest
     - echo " Deploying the frontend image"
-    - docker run -d --name danhba-frontend --restart=always -p 80:80 -p 80:3000 $FRONTEND_IMAGE:latest
-    
+    - docker run -d --name danhba-frontend --restart=always -p 80:80 -p 3000:80 $FRONTEND_IMAGE:latest
+
     - echo "============================"
     - echo "Deployment Completed"
     - echo "============================"
