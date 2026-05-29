@@ -19,10 +19,9 @@ interface Parking {
   updated_at?: string;
 }
 
-type FilterType = "all" | "kín" | "mở";
+type FilterType = "all" | "kín" | "mở" | "acv";
 
 export default function Parking() {
-
   const [data, setData] = useState<Parking[]>([]);
   const [loading, setLoading] = useState(false);
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
@@ -102,6 +101,19 @@ export default function Parking() {
             }
           >
             Bãi mở
+          </Button>
+          <Button
+            type={activeFilter === "acv" ? "primary" : "default"}
+            style={{
+              backgroundColor: activeFilter === "acv" ? "#059669" : undefined,
+              borderColor: activeFilter === "acv" ? "#059669" : undefined,
+              color: activeFilter === "acv" ? "white" : undefined,
+            }}
+            onClick={() =>
+              setActiveFilter(activeFilter === "acv" ? "all" : "acv")
+            }
+          >
+            ACV
           </Button>
         </Space>
       }
