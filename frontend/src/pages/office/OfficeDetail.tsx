@@ -7,7 +7,7 @@ interface Contact {
   fullname: string;
   phone: string;
   email: string;
-  title: string;
+  title_name: string;
 }
 
 interface Office {
@@ -109,8 +109,8 @@ export default function OfficeDetail() {
               },
               {
                 title: "Chức Vụ",
-                dataIndex: "title",
-                key: "title",
+                dataIndex: "title_name",
+                key: "title_name",
                 width: "30%",
               },
             ]}
