@@ -12,7 +12,9 @@ from .models import (
     Type,
     Channel,
     Tollplaza_channel,
-    Office
+    Parking_channel,
+    Office,
+
 )
 
 
@@ -41,12 +43,19 @@ class ContactAdmin(admin.ModelAdmin):
             if contact_type == 'tollplaza':
                 cleaned_data['parkings'] = []
                 cleaned_data['offices'] = []
+                cleaned_data['contractors'] = []
             elif contact_type == 'parking':
                 cleaned_data['tollplazas'] = []
                 cleaned_data['offices'] = []
+                cleaned_data['contractors'] = []
             elif contact_type == 'office':
                 cleaned_data['tollplazas'] = []
                 cleaned_data['parkings'] = []
+                cleaned_data['contractors'] = []
+            elif contact_type == 'contractor':
+                cleaned_data['tollplazas'] = []
+                cleaned_data['parkings'] = []
+                cleaned_data['offices'] = []
 
             return cleaned_data
         def clean_phone(self):
@@ -61,7 +70,7 @@ class ContactAdmin(admin.ModelAdmin):
     list_display = ('firstname', 'lastname', 'email', 'phone', 'title', 'contact_type', 'status')
     list_filter = ('title', 'contact_type', 'status')
     search_fields = ('firstname', 'lastname', 'email', 'phone')
-    autocomplete_fields = ['title', 'tollplazas', 'parkings', 'offices']
+    autocomplete_fields = ['title', 'tollplazas', 'parkings', 'offices', 'contractors']
     ordering = ( 'firstname','lastname',)
     search_fields = ('firstname', 'lastname','phone')
     class Media:
@@ -133,6 +142,11 @@ class TollplazaChannelAdmin(admin.ModelAdmin):
     list_display = ('tollplaza', 'channel', 'code', 'status')
     list_filter = ('status',)
     autocomplete_fields = ('tollplaza', 'channel')
+    
+class ParkingChannelAdmin(admin.ModelAdmin):
+    list_display = ('parking', 'channel', 'code', 'status')
+    list_filter = ('status',)
+    autocomplete_fields = ('parking', 'channel')
 
 class ChannelAdmin(admin.ModelAdmin):
     list_display = ('name', 'provider', 'description', 'status')
@@ -155,4 +169,5 @@ admin.site.register(Office, OfficeAdmin)
 
 # Junction tables - chỉ giữ Tollplaza_channel (có thêm field code)
 admin.site.register(Tollplaza_channel, TollplazaChannelAdmin)
+admin.site.register(Parking_channel, ParkingChannelAdmin)
 

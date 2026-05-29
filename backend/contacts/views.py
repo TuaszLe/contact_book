@@ -103,6 +103,16 @@ def contractor_list_api(request):
     return Response(serializer.data)
 
 
+@api_view(["GET"])
+def contractor_detail_api(request, pk):
+
+    contractor = get_object_or_404(Contractor.objects.all(), pk=pk)
+    contacts = contractor.contacts.all()
+
+    return Response({
+        "contractor": ContractorSerializer(contractor).data,
+        "contacts": ContactSerializer(contacts, many=True).data
+    })
 # ========================
 # PROJECT LIST
 # ========================

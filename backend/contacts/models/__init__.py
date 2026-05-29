@@ -9,8 +9,10 @@ from .contact import Contact
 from .office import Office
 from .tollplaza import Tollplaza
 from .parking import Parking
+from .contractor import Contractor
 from .junction import (
     Tollplaza_channel,
+    Parking_channel,
     # Tollplaza_contractor,
     # Tollplaza_contact,
     # Parking_contact,

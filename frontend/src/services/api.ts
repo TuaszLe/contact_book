@@ -57,4 +57,16 @@ export const getOfficeDetail = async (id: number) => {
   const res = await axios.get(`${API}/offices/${id}/`);
   return res.data;
 };
+export const getContractor = async (search = "") => {
+  const res = await api.get("/contractors/", {
+    params: { search },
+  });
+  return res.data;
+};
+
+export const getContractorDetail = async (id: number) => {
+  const res = await axios.get(`${API}/contractors/${id}/`);
+  return res.data;
+};
+
 export default api;

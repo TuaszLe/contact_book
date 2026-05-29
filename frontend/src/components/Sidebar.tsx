@@ -36,31 +36,36 @@ export default function Sidebar({ collapsed }: Props) {
         },
         {
           key: "4",
-          icon: <span>🚧</span>,
-          label: <Link to="/tollplaza">TollPlaza</Link>,
+          icon: <span>🏢</span>,
+          label: <Link to="/contractor">DS nhà thầu</Link>,
         },
         {
           key: "5",
-          icon: <span>🅿️</span>,
-          label: <Link to="/Parking">Parking</Link>,
+          icon: <span>🚧</span>,
+          label: <Link to="/tollplaza">DS trạm thu phí</Link>,
         },
         {
           key: "6",
+          icon: <span>🅿️</span>,
+          label: <Link to="/Parking">DS bãi đỗ</Link>,
+        },
+        {
+          key: "7",
           icon: <ToolOutlined />,
           label: <Link to="/mtnc">Lịch bảo trì</Link>,
         },
         {
-          key: "7",
+          key: "8",
           icon: <PhoneOutlined />,
           label: <Link to="/so">Đầu mối cảnh báo</Link>,
         },
         {
-          key: "8",
+          key: "9",
           icon: <PhoneOutlined />,
           label: <Link to="/ds_truong_tuyen">DS trường tuyến</Link>,
         },
         {
-          key: "9",
+          key: "10",
           icon: <PhoneOutlined />,
           label: <Link to="/xu_ly_lv_1">Xử lý level 1</Link>,
         },

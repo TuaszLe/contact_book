@@ -15,6 +15,16 @@ class Tollplaza_channel(models.Model):
 
     class Meta:
         db_table = 'tollplaza_channel'
+class Parking_channel(models.Model):
+    parking = models.ForeignKey(Parking, on_delete=models.CASCADE)
+    channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
+    code = models.CharField(max_length=50)
+    status = models.SmallIntegerField(default=1)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'parking_channel'
 
 # class Tollplaza_contractor(models.Model):
 #     tollplaza = models.ForeignKey(Tollplaza, on_delete=models.CASCADE)
