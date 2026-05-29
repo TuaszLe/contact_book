@@ -7,6 +7,7 @@ interface Contact {
   fullname: string;
   phone: string;
   email: string;
+  title: string;
 }
 
 interface Office {
@@ -105,6 +106,12 @@ export default function OfficeDetail() {
                 width: "35%",
                 render: (text) =>
                   text ? <a href={`mailto:${text}`}>{text}</a> : "N/A",
+              },
+              {
+                title: "Chức Vụ",
+                dataIndex: "title",
+                key: "title",
+                width: "30%",
               },
             ]}
             dataSource={contacts}
