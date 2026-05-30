@@ -34,6 +34,7 @@ interface SummaryItem {
   lanes?: number;
   lat?: number;
   lng?: number;
+  status?: number;
 }
 
 interface GroupSummary {
@@ -206,7 +207,6 @@ export default function Dashboard() {
     (i) => i.lat && i.lng && !isNaN(Number(i.lat)) && !isNaN(Number(i.lng))
   ).length;
 
-  // Top trạm nhiều làn nhất
   const topToll = [...tollplazas]
     .filter((i) => (i.lanes ?? 0) > 0)
     .sort((a, b) => (b.lanes ?? 0) - (a.lanes ?? 0))
@@ -323,22 +323,32 @@ export default function Dashboard() {
                   </Col>
                 </Row>
 
-                {/* Map + Right panel */}
+                {/* Bố cục: Bản đồ dọc bên trái, thông tin bên phải */}
                 <Row gutter={[16, 16]}>
-                  {/* Bản đồ */}
+                  {/* Bản đồ — cao hơn, dọc theo hình Việt Nam */}
                   <Col xs={24} lg={14}>
                     <Card
                       title={
                         <span>
                           <EnvironmentOutlined style={{ marginRight: 6 }} />
                           Vị trí trạm trên bản đồ
+                          <Text type="secondary" style={{ fontSize: 12, marginLeft: 8, fontWeight: 400 }}>
+                            (click vào nút tròn để xem chi tiết)
+                          </Text>
                         </span>
                       }
                       style={{ borderRadius: 12 }}
-                      styles={{ body: { padding: 0, overflow: "hidden", borderRadius: "0 0 12px 12px" } }}
+                      styles={{
+                        body: {
+                          padding: 0,
+                          overflow: "hidden",
+                          borderRadius: "0 0 12px 12px",
+                        },
+                      }}
                     >
-                      <div style={{ height: 380 }}>
-                        <MapView data={tollplazas} height={380} />
+                      {/* height 520px — đủ để hiển thị dọc Việt Nam từ Lạng Sơn → Cà Mau */}
+                      <div style={{ height: 520 }}>
+                        <MapView data={tollplazas} height={520} />
                       </div>
                     </Card>
                   </Col>
@@ -369,11 +379,7 @@ export default function Dashboard() {
                   <>
                     <Divider style={{ margin: "20px 0 16px" }} />
                     <Card
-                      title={
-                        <span>
-                          🏆 Top trạm nhiều làn nhất
-                        </span>
-                      }
+                      title={<span>🏆 Top trạm nhiều làn nhất</span>}
                       style={{ borderRadius: 12 }}
                     >
                       <Row gutter={[12, 12]}>
@@ -385,7 +391,12 @@ export default function Dashboard() {
                                 alignItems: "center",
                                 gap: 10,
                                 padding: "10px 14px",
-                                background: idx === 0 ? "#fff7e6" : idx === 1 ? "#f6ffed" : "#fafafa",
+                                background:
+                                  idx === 0
+                                    ? "#fff7e6"
+                                    : idx === 1
+                                    ? "#f6ffed"
+                                    : "#fafafa",
                                 borderRadius: 8,
                                 border: "1px solid #f0f0f0",
                               }}
@@ -395,7 +406,12 @@ export default function Dashboard() {
                                   width: 28,
                                   height: 28,
                                   borderRadius: "50%",
-                                  background: idx === 0 ? "#fa8c16" : idx === 1 ? "#52c41a" : "#d9d9d9",
+                                  background:
+                                    idx === 0
+                                      ? "#fa8c16"
+                                      : idx === 1
+                                      ? "#52c41a"
+                                      : "#d9d9d9",
                                   color: "#fff",
                                   display: "flex",
                                   alignItems: "center",
@@ -409,7 +425,11 @@ export default function Dashboard() {
                               </div>
                               <div style={{ minWidth: 0 }}>
                                 <Text
-                                  style={{ fontSize: 13, fontWeight: 600, display: "block" }}
+                                  style={{
+                                    fontSize: 13,
+                                    fontWeight: 600,
+                                    display: "block",
+                                  }}
                                   ellipsis={{ tooltip: item.name }}
                                 >
                                   {item.name}
@@ -436,7 +456,6 @@ export default function Dashboard() {
             label: <span>🅿️ Bãi đỗ xe</span>,
             children: (
               <div>
-                {/* KPI */}
                 <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
                   <Col xs={12} sm={8}>
                     <KpiCard
@@ -472,7 +491,6 @@ export default function Dashboard() {
                   </Col>
                 </Row>
 
-                {/* Phân bố + Danh sách */}
                 <Row gutter={[16, 16]}>
                   <Col xs={24} lg={10}>
                     <Row gutter={[0, 16]}>
