@@ -269,10 +269,10 @@ export default function Dashboard() {
       {/* Page title */}
       <div style={{ marginBottom: 20 }}>
         <Title level={4} style={{ margin: 0 }}>
-          📊 Tổng quan hệ thống
+          📊 Dashboard
         </Title>
         <Text type="secondary" style={{ fontSize: 13 }}>
-          Dữ liệu thời gian thực từ API
+          
         </Text>
       </div>
 
@@ -305,22 +305,7 @@ export default function Dashboard() {
                       suffix="làn"
                     />
                   </Col>
-                  <Col xs={12} sm={6}>
-                    <KpiCard
-                      title="Có tọa độ"
-                      value={withCoords}
-                      icon={<EnvironmentOutlined />}
-                      color="#7c3aed"
-                    />
-                  </Col>
-                  <Col xs={12} sm={6}>
-                    <KpiCard
-                      title="Dự án"
-                      value={tollplazaByProject.length}
-                      icon={<ProjectOutlined />}
-                      color="#ea580c"
-                    />
-                  </Col>
+               
                 </Row>
 
                 {/* Bố cục: Bản đồ dọc bên trái, thông tin bên phải */}
