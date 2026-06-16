@@ -64,10 +64,10 @@ export default function Office() {
       <div style={{ marginBottom: 20 }}>
         <Title level={4} style={{ margin: 0 }}>
           <BankOutlined style={{ marginRight: 8 }} />
-          Danh sách văn phòng
+          Danh sách các phòng ban
         </Title>
         <Text type="secondary" style={{ fontSize: 13 }}>
-          Tổng cộng <strong>{data.length}</strong> văn phòng
+          Tổng cộng <strong>{data.length}</strong> phòng ban
           {search && (
             <> — đang hiển thị <strong style={{ color: "#1677ff" }}>{filtered.length}</strong> kết quả</>
           )}
@@ -78,7 +78,7 @@ export default function Office() {
       <div style={{ marginBottom: 16, maxWidth: 360 }}>
         <Input
           prefix={<SearchOutlined style={{ color: "#bbb" }} />}
-          placeholder="Tìm theo tên văn phòng..."
+          placeholder="Tìm theo tên phòng ban..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           allowClear
