@@ -15,8 +15,6 @@ interface Tollplaza {
   type_name?: string;
   lanes?: number;
   status?: number;
-  channel_name?: string;
-  channel_code?: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -47,7 +45,6 @@ export default function Tollplaza() {
     fetchData(search);
   }, [search]);
 
-  // Lọc data theo type
   const filteredData = data.filter((item) => {
     if (activeFilter === "all") return true;
     return item.type_name?.toLowerCase() === activeFilter;
@@ -65,14 +62,6 @@ export default function Tollplaza() {
     {
       title: "Type",
       dataIndex: "type_name",
-    },
-    {
-      title: "Channel",
-      dataIndex: "channel_name",
-    },
-    {
-      title: "Channel Code",
-      dataIndex: "channel_code",
     },
   ];
 
