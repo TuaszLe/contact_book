@@ -3,7 +3,6 @@ import {
   Card,
   Row,
   Col,
-  Statistic,
   Spin,
   Empty,
   Tabs,
@@ -16,7 +15,6 @@ import {
 import {
   EnvironmentOutlined,
   ApartmentOutlined,
-  ProjectOutlined,
   CarOutlined,
   AppstoreOutlined,
 } from "@ant-design/icons";
@@ -118,9 +116,7 @@ function GroupProgressList({
   const max = Math.max(...groups.map((g) => g.count), 1);
   return (
     <Card
-      title={
-        <span style={{ fontSize: 14, fontWeight: 600 }}>{title}</span>
-      }
+      title={<span style={{ fontSize: 14, fontWeight: 600 }}>{title}</span>}
       style={{ borderRadius: 12, height: "100%" }}
       styles={{ body: { padding: "12px 20px" } }}
     >
@@ -167,7 +163,7 @@ export default function Dashboard() {
 
   const groupBy = (
     items: SummaryItem[],
-    keyFn: (item: SummaryItem) => string
+    keyFn: (item: SummaryItem) => string,
   ): GroupSummary[] => {
     const map: Record<string, GroupSummary> = {};
     items.forEach((item) => {
@@ -203,9 +199,9 @@ export default function Dashboard() {
   const parkingByContractor = groupBy(parkings, (i) => i.contractor_name || "");
   const parkingByType = groupBy(parkings, (i) => i.type_name || "");
   const totalTollLanes = tollplazas.reduce((s, i) => s + (i.lanes ?? 0), 0);
-  const withCoords = tollplazas.filter(
-    (i) => i.lat && i.lng && !isNaN(Number(i.lat)) && !isNaN(Number(i.lng))
-  ).length;
+/*  const withCoords = tollplazas.filter(
+    (i) => i.lat && i.lng && !isNaN(Number(i.lat)) && !isNaN(Number(i.lng)),
+  ).length;*/
 
   const topToll = [...tollplazas]
     .filter((i) => (i.lanes ?? 0) > 0)
@@ -271,9 +267,7 @@ export default function Dashboard() {
         <Title level={4} style={{ margin: 0 }}>
           📊 Dashboard
         </Title>
-        <Text type="secondary" style={{ fontSize: 13 }}>
-          
-        </Text>
+        <Text type="secondary" style={{ fontSize: 13 }}></Text>
       </div>
 
       <Tabs
@@ -305,7 +299,6 @@ export default function Dashboard() {
                       suffix="làn"
                     />
                   </Col>
-               
                 </Row>
 
                 {/* Bố cục: Bản đồ dọc bên trái, thông tin bên phải */}
@@ -317,7 +310,14 @@ export default function Dashboard() {
                         <span>
                           <EnvironmentOutlined style={{ marginRight: 6 }} />
                           Vị trí trạm trên bản đồ
-                          <Text type="secondary" style={{ fontSize: 12, marginLeft: 8, fontWeight: 400 }}>
+                          <Text
+                            type="secondary"
+                            style={{
+                              fontSize: 12,
+                              marginLeft: 8,
+                              fontWeight: 400,
+                            }}
+                          >
                             (click vào nút tròn để xem chi tiết)
                           </Text>
                         </span>
@@ -380,8 +380,8 @@ export default function Dashboard() {
                                   idx === 0
                                     ? "#fff7e6"
                                     : idx === 1
-                                    ? "#f6ffed"
-                                    : "#fafafa",
+                                      ? "#f6ffed"
+                                      : "#fafafa",
                                 borderRadius: 8,
                                 border: "1px solid #f0f0f0",
                               }}
@@ -395,8 +395,8 @@ export default function Dashboard() {
                                     idx === 0
                                       ? "#fa8c16"
                                       : idx === 1
-                                      ? "#52c41a"
-                                      : "#d9d9d9",
+                                        ? "#52c41a"
+                                        : "#d9d9d9",
                                   color: "#fff",
                                   display: "flex",
                                   alignItems: "center",
@@ -421,7 +421,8 @@ export default function Dashboard() {
                                 </Text>
                                 <Text type="secondary" style={{ fontSize: 12 }}>
                                   {item.lanes} làn
-                                  {item.project_name && ` • ${item.project_name}`}
+                                  {item.project_name &&
+                                    ` • ${item.project_name}`}
                                 </Text>
                               </div>
                             </div>
@@ -455,7 +456,7 @@ export default function Dashboard() {
                       title="Bãi mở"
                       value={
                         parkings.filter(
-                          (i) => i.type_name?.toLowerCase().trim() === "mở"
+                          (i) => i.type_name?.toLowerCase().trim() === "mở",
                         ).length
                       }
                       icon={<span style={{ fontSize: 18 }}>🌅</span>}
@@ -467,7 +468,7 @@ export default function Dashboard() {
                       title="Bãi kín"
                       value={
                         parkings.filter(
-                          (i) => i.type_name?.toLowerCase().trim() === "kín"
+                          (i) => i.type_name?.toLowerCase().trim() === "kín",
                         ).length
                       }
                       icon={<span style={{ fontSize: 18 }}>🏚️</span>}

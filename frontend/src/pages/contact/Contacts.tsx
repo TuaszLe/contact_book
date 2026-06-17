@@ -57,11 +57,17 @@ function getInitials(name: string) {
 
 // Màu avatar theo chữ cái
 const avatarColors = [
-  "#1677ff", "#0e9488", "#7c3aed", "#ea580c",
-  "#db2777", "#059669", "#d97706", "#2563eb",
+  "#1677ff",
+  "#0e9488",
+  "#7c3aed",
+  "#ea580c",
+  "#db2777",
+  "#059669",
+  "#d97706",
+  "#2563eb",
 ];
 function getAvatarColor(name: string) {
-  const code = (name?.charCodeAt(0) ?? 0);
+  const code = name?.charCodeAt(0) ?? 0;
   return avatarColors[code % avatarColors.length];
 }
 
@@ -74,7 +80,9 @@ export default function Contacts() {
   const [searchPhone, setSearchPhone] = useState("");
   const [searchEmail, setSearchEmail] = useState("");
   const [filterType, setFilterType] = useState<string | undefined>(undefined);
-  const [filterLocation, setFilterLocation] = useState<string | undefined>(undefined);
+  const [filterLocation, setFilterLocation] = useState<string | undefined>(
+    undefined,
+  );
 
   useEffect(() => {
     const fetch = async () => {
@@ -92,11 +100,13 @@ export default function Contacts() {
   // Lấy danh sách loại và đơn vị unique
   const typeOptions = useMemo(
     () => [...new Set(contacts.map((c) => c.contact_type).filter(Boolean))],
-    [contacts]
+    [contacts],
   );
   const locationOptions = useMemo(
-    () => [...new Set(contacts.map((c) => c.contact_location_name).filter(Boolean))],
-    [contacts]
+    () => [
+      ...new Set(contacts.map((c) => c.contact_location_name).filter(Boolean)),
+    ],
+    [contacts],
   );
 
   // Lọc phía client
@@ -106,15 +116,26 @@ export default function Contacts() {
       const phone = c.phone?.toLowerCase() ?? "";
       const email = c.email?.toLowerCase() ?? "";
       if (searchName && !name.includes(searchName.toLowerCase())) return false;
-      if (searchPhone && !phone.includes(searchPhone.toLowerCase())) return false;
-      if (searchEmail && !email.includes(searchEmail.toLowerCase())) return false;
+      if (searchPhone && !phone.includes(searchPhone.toLowerCase()))
+        return false;
+      if (searchEmail && !email.includes(searchEmail.toLowerCase()))
+        return false;
       if (filterType && c.contact_type !== filterType) return false;
-      if (filterLocation && c.contact_location_name !== filterLocation) return false;
+      if (filterLocation && c.contact_location_name !== filterLocation)
+        return false;
       return true;
     });
-  }, [contacts, searchName, searchPhone, searchEmail, filterType, filterLocation]);
+  }, [
+    contacts,
+    searchName,
+    searchPhone,
+    searchEmail,
+    filterType,
+    filterLocation,
+  ]);
 
-  const hasFilter = searchName || searchPhone || searchEmail || filterType || filterLocation;
+  const hasFilter =
+    searchName || searchPhone || searchEmail || filterType || filterLocation;
 
   const clearAll = () => {
     setSearchName("");
@@ -172,7 +193,10 @@ export default function Contacts() {
       ellipsis: true,
       render: (email: string) =>
         email ? (
-          <a href={`mailto:${email}`} style={{ color: "#1677ff", fontSize: 13 }}>
+          <a
+            href={`mailto:${email}`}
+            style={{ color: "#1677ff", fontSize: 13 }}
+          >
             <MailOutlined style={{ marginRight: 5 }} />
             {email}
           </a>
@@ -237,12 +261,15 @@ export default function Contacts() {
           Danh bạ liên hệ
         </Typography.Title>
         <Text type="secondary" style={{ fontSize: 13 }}>
-          Tổng cộng{" "}
-          <strong>{contacts.length}</strong> liên hệ
+          Tổng cộng <strong>{contacts.length}</strong> liên hệ
           {hasFilter && (
             <>
-              {" "}—{" "}đang hiển 
-              <strong style={{ color: "#1677ff" }}>{filtered.length}</strong> kết quả
+              {" "}
+              — đang hiển thị{" "}
+              <strong style={{ color: "#1677ff" }}>
+                {filtered.length}
+              </strong>{" "}
+              kết quả
             </>
           )}
         </Text>
@@ -351,7 +378,7 @@ export default function Contacts() {
             size: "small",
           }}
           size="small"
-          rowHoverBg="#fafafa"
+          rowHoverable={true}
           style={{ fontSize: 13 }}
           rowClassName={() => "contact-row"}
           scroll={{ x: 900 }}

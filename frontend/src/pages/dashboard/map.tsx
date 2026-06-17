@@ -71,7 +71,12 @@ function StationPopup({ item }: { item: StationData }) {
       >
         <Text
           strong
-          style={{ color: "#fff", fontSize: 14, display: "block", lineHeight: 1.3 }}
+          style={{
+            color: "#fff",
+            fontSize: 14,
+            display: "block",
+            lineHeight: 1.3,
+          }}
         >
           {item.name}
         </Text>
@@ -94,30 +99,63 @@ function StationPopup({ item }: { item: StationData }) {
 
       <div style={{ padding: "10px 4px 0" }}>
         {item.project_name && (
-          <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 7 }}>
-            <ProjectOutlined style={{ color: "#1677ff", fontSize: 13, flexShrink: 0 }} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 7,
+              marginBottom: 7,
+            }}
+          >
+            <ProjectOutlined
+              style={{ color: "#1677ff", fontSize: 13, flexShrink: 0 }}
+            />
             <Text style={{ fontSize: 12 }}>
-              <Text type="secondary" style={{ fontSize: 12 }}>Dự án: </Text>
+              <Text type="secondary" style={{ fontSize: 12 }}>
+                Dự án:{" "}
+              </Text>
               {item.project_name}
             </Text>
           </div>
         )}
 
         {item.contractor_name && (
-          <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 7 }}>
-            <InfoCircleOutlined style={{ color: "#7c3aed", fontSize: 13, flexShrink: 0 }} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 7,
+              marginBottom: 7,
+            }}
+          >
+            <InfoCircleOutlined
+              style={{ color: "#7c3aed", fontSize: 13, flexShrink: 0 }}
+            />
             <Text style={{ fontSize: 12 }}>
-              <Text type="secondary" style={{ fontSize: 12 }}>Nhà thầu: </Text>
+              <Text type="secondary" style={{ fontSize: 12 }}>
+                Nhà thầu:{" "}
+              </Text>
               {item.contractor_name}
             </Text>
           </div>
         )}
 
         {(item.lanes ?? 0) > 0 && (
-          <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 7 }}>
-            <CarOutlined style={{ color: "#ea580c", fontSize: 13, flexShrink: 0 }} />
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 7,
+              marginBottom: 7,
+            }}
+          >
+            <CarOutlined
+              style={{ color: "#ea580c", fontSize: 13, flexShrink: 0 }}
+            />
             <Text style={{ fontSize: 12 }}>
-              <Text type="secondary" style={{ fontSize: 12 }}>Số làn: </Text>
+              <Text type="secondary" style={{ fontSize: 12 }}>
+                Số làn:{" "}
+              </Text>
               <Text strong>{item.lanes}</Text> làn
             </Text>
           </div>
@@ -127,7 +165,9 @@ function StationPopup({ item }: { item: StationData }) {
           <>
             <Divider style={{ margin: "8px 0" }} />
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-              <EnvironmentOutlined style={{ color: "#0e9488", fontSize: 13, flexShrink: 0 }} />
+              <EnvironmentOutlined
+                style={{ color: "#0e9488", fontSize: 13, flexShrink: 0 }}
+              />
               <Text type="secondary" style={{ fontSize: 11 }}>
                 {Number(item.lat).toFixed(5)}, {Number(item.lng).toFixed(5)}
               </Text>
@@ -137,7 +177,10 @@ function StationPopup({ item }: { item: StationData }) {
 
         {item.status != null && (
           <div style={{ marginTop: 8 }}>
-            <Tag color={item.status === 1 ? "success" : "default"} style={{ fontSize: 11 }}>
+            <Tag
+              color={item.status === 1 ? "success" : "default"}
+              style={{ fontSize: 11 }}
+            >
               {item.status === 1 ? "Hoạt động" : "Ngừng hoạt động"}
             </Tag>
           </div>
@@ -147,7 +190,7 @@ function StationPopup({ item }: { item: StationData }) {
   );
 }
 
-export default function MapView({ data, height = 520 }: Props) {
+export default function MapView({ data }: Props) {
   // Center dọc theo Việt Nam: trung điểm kinh tuyến ~107.5°E, vĩ tuyến ~16.5°N
   // zoom=5.6 hiển thị toàn dải từ Lạng Sơn (23°N) → Cà Mau (8.5°N)
   const center: [number, number] = [16.5, 107.5];
@@ -165,21 +208,20 @@ export default function MapView({ data, height = 520 }: Props) {
       />
 
       {data.map((item) =>
-        item.lat && item.lng && !isNaN(Number(item.lat)) && !isNaN(Number(item.lng)) ? (
+        item.lat &&
+        item.lng &&
+        !isNaN(Number(item.lat)) &&
+        !isNaN(Number(item.lng)) ? (
           <Marker
             key={item.id}
             position={[Number(item.lat), Number(item.lng)]}
             icon={svgIcon}
           >
-            <Popup
-              minWidth={240}
-              maxWidth={300}
-              className="station-popup"
-            >
+            <Popup minWidth={240} maxWidth={300} className="station-popup">
               <StationPopup item={item} />
             </Popup>
           </Marker>
-        ) : null
+        ) : null,
       )}
     </MapContainer>
   );
