@@ -17,13 +17,13 @@ import {
 } from "antd";
 import {
   ArrowLeftOutlined,
-  BankOutlined,
+  ToolOutlined,
   PhoneOutlined,
   MailOutlined,
   TeamOutlined,
   CalendarOutlined,
 } from "@ant-design/icons";
-import { getOfficeDetail } from "../../services/api";
+import { getContractorDetail } from "../../services/api";
 
 const { Text, Title } = Typography;
 
@@ -35,7 +35,7 @@ interface Contact {
   title_name: string;
 }
 
-interface Office {
+interface Contractor {
   id: number;
   name: string;
   description?: string;
@@ -56,11 +56,11 @@ function getInitials(name: string) {
   return parts[parts.length - 1]?.charAt(0).toUpperCase() ?? "?";
 }
 
-export default function OfficeDetail() {
+export default function ContractorDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [office, setOffice] = useState<Office | null>(null);
+  const [contractor, setContractor] = useState<Contractor | null>(null);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -69,12 +69,12 @@ export default function OfficeDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getOfficeDetail(Number(id));
-        setOffice(data.office);
+        const data = await getContractorDetail(Number(id));
+        setContractor(data.contractor);
         setContacts(data.contacts ?? []);
         setError(null);
       } catch {
-        setError("Không thể tải thông tin văn phòng");
+        setError("Không thể tải thông tin nhà thầu");
       } finally {
         setLoading(false);
       }
@@ -90,10 +90,12 @@ export default function OfficeDetail() {
     );
   }
 
-  if (error || !office) {
+  if (error || !contractor) {
     return (
       <div style={{ padding: 24 }}>
-        <Button icon={<ArrowLeftOutlined />} onClick={() => navigate("/office")} style={{ marginBottom: 16 }}>Quay lại</Button>
+        <Button icon={<ArrowLeftOutlined />} onClick={() => navigate("/contractor")} style={{ marginBottom: 16 }}>
+          Quay lại
+        </Button>
         <Empty description={error || "Không tìm thấy dữ liệu"} />
       </div>
     );
@@ -107,7 +109,9 @@ export default function OfficeDetail() {
 
   const formatDate = (d?: string) => {
     if (!d) return "—";
-    return new Date(d).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit", year: "numeric" });
+    return new Date(d).toLocaleDateString("vi-VN", {
+      day: "2-digit", month: "2-digit", year: "numeric",
+    });
   };
 
   return (
@@ -115,7 +119,7 @@ export default function OfficeDetail() {
       {/* Nút quay lại */}
       <Button
         icon={<ArrowLeftOutlined />}
-        onClick={() => navigate("/office")}
+        onClick={() => navigate("/contractor")}
         style={{ marginBottom: 16, borderRadius: 8 }}
       >
         Quay lại danh sách
@@ -126,8 +130,8 @@ export default function OfficeDetail() {
         style={{
           marginBottom: 20,
           borderRadius: 12,
-          background: "linear-gradient(135deg, #e6f4ff 0%, #f0f5ff 100%)",
-          border: "1.5px solid #bae0ff",
+          background: "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)",
+          border: "1.5px solid #86efac",
         }}
         styles={{ body: { padding: "24px 28px" } }}
       >
@@ -137,7 +141,7 @@ export default function OfficeDetail() {
               width: 60,
               height: 60,
               borderRadius: 14,
-              background: "#1677ff",
+              background: "#059669",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -146,15 +150,19 @@ export default function OfficeDetail() {
               flexShrink: 0,
             }}
           >
-            <BankOutlined />
+            <ToolOutlined />
           </div>
           <div>
-            <Title level={3} style={{ margin: 0, color: "#1677ff" }}>
-              {office.name}
+            <Title level={3} style={{ margin: 0, color: "#059669" }}>
+              {contractor.name}
             </Title>
-            {office.description && (
+            {contractor.description ? (
               <Text type="secondary" style={{ fontSize: 14, display: "block", marginTop: 4 }}>
-                {office.description}
+                {contractor.description}
+              </Text>
+            ) : (
+              <Text type="secondary" style={{ fontSize: 13, fontStyle: "italic" }}>
+                Chưa có mô tả
               </Text>
             )}
           </div>
@@ -165,7 +173,7 @@ export default function OfficeDetail() {
         <Row gutter={32}>
           <Col>
             <Space>
-              <TeamOutlined style={{ color: "#1677ff" }} />
+              <TeamOutlined style={{ color: "#059669" }} />
               <Text style={{ fontSize: 13 }}>
                 <strong>{contacts.length}</strong> liên hệ
               </Text>
@@ -175,7 +183,7 @@ export default function OfficeDetail() {
             <Space>
               <CalendarOutlined style={{ color: "#999" }} />
               <Text type="secondary" style={{ fontSize: 13 }}>
-                Tạo: {formatDate(office.created_at)}
+                Tạo: {formatDate(contractor.created_at)}
               </Text>
             </Space>
           </Col>
@@ -183,14 +191,14 @@ export default function OfficeDetail() {
             <Space>
               <CalendarOutlined style={{ color: "#999" }} />
               <Text type="secondary" style={{ fontSize: 13 }}>
-                Cập nhật: {formatDate(office.updated_at)}
+                Cập nhật: {formatDate(contractor.updated_at)}
               </Text>
             </Space>
           </Col>
-          {office.status != null && (
+          {contractor.status != null && (
             <Col>
-              <Tag color={office.status === 1 ? "success" : "default"}>
-                {office.status === 1 ? "Hoạt động" : "Ngừng hoạt động"}
+              <Tag color={contractor.status === 1 ? "success" : "default"}>
+                {contractor.status === 1 ? "Hoạt động" : "Ngừng hoạt động"}
               </Tag>
             </Col>
           )}
@@ -203,7 +211,7 @@ export default function OfficeDetail() {
           <Space>
             <TeamOutlined />
             <span>Danh sách liên hệ</span>
-            <Tag color="blue">{contacts.length} người</Tag>
+            <Tag color="green">{contacts.length} người</Tag>
           </Space>
         }
         extra={
@@ -226,7 +234,7 @@ export default function OfficeDetail() {
       >
         {contacts.length === 0 ? (
           <div style={{ padding: 32 }}>
-            <Empty description="Chưa có liên hệ nào trong văn phòng này" />
+            <Empty description="Chưa có liên hệ nào thuộc nhà thầu này" />
           </div>
         ) : (
           <Table
@@ -241,12 +249,13 @@ export default function OfficeDetail() {
               size: "small",
             }}
             scroll={{ x: 700 }}
-            rowClassName={() => "office-contact-row"}
+            rowClassName={() => "contractor-contact-row"}
             columns={[
               {
                 title: "Họ tên",
                 dataIndex: "fullname",
-                sorter: (a, b) => (a.fullname ?? "").localeCompare(b.fullname ?? ""),
+                sorter: (a: Contact, b: Contact) =>
+                  (a.fullname ?? "").localeCompare(b.fullname ?? ""),
                 render: (name: string) => (
                   <Space size={10}>
                     <Avatar
@@ -294,7 +303,9 @@ export default function OfficeDetail() {
                 width: 180,
                 ellipsis: true,
                 render: (v: string) =>
-                  v ? <Text style={{ fontSize: 13 }}>{v}</Text> : <Text type="secondary">—</Text>,
+                  v
+                    ? <Text style={{ fontSize: 13 }}>{v}</Text>
+                    : <Text type="secondary">—</Text>,
               },
             ]}
           />
@@ -302,8 +313,8 @@ export default function OfficeDetail() {
       </Card>
 
       <style>{`
-        .office-contact-row:hover td {
-          background: #f0f7ff !important;
+        .contractor-contact-row:hover td {
+          background: #f0fdf4 !important;
         }
         .ant-table-thead > tr > th {
           background: #fafafa !important;

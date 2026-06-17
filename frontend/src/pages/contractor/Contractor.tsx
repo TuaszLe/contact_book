@@ -13,16 +13,16 @@ import {
 } from "antd";
 import {
   SearchOutlined,
-  BankOutlined,
+  ToolOutlined,
   TeamOutlined,
   RightOutlined,
 } from "@ant-design/icons";
-import { getOffice } from "../../services/api";
+import { getContractor } from "../../services/api";
 import { useNavigate } from "react-router-dom";
 
 const { Text, Title } = Typography;
 
-interface Office {
+interface Contractor {
   id: number;
   name: string;
   description?: string;
@@ -32,8 +32,8 @@ interface Office {
   updated_at?: string;
 }
 
-export default function Office() {
-  const [data, setData] = useState<Office[]>([]);
+export default function Contractor() {
+  const [data, setData] = useState<Contractor[]>([]);
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ export default function Office() {
     const fetch = async () => {
       setLoading(true);
       try {
-        const res = await getOffice();
+        const res = await getContractor();
         setData(res ?? []);
       } finally {
         setLoading(false);
@@ -54,7 +54,8 @@ export default function Office() {
   const filtered = useMemo(() => {
     if (!search.trim()) return data;
     return data.filter((o) =>
-      o.name?.toLowerCase().includes(search.toLowerCase())
+      o.name?.toLowerCase().includes(search.toLowerCase()) ||
+      o.description?.toLowerCase().includes(search.toLowerCase())
     );
   }, [data, search]);
 
@@ -63,13 +64,13 @@ export default function Office() {
       {/* Header */}
       <div style={{ marginBottom: 20 }}>
         <Title level={4} style={{ margin: 0 }}>
-          <BankOutlined style={{ marginRight: 8 }} />
-          Danh sách các phòng ban
+          <ToolOutlined style={{ marginRight: 8 }} />
+          Danh sách nhà thầu
         </Title>
         <Text type="secondary" style={{ fontSize: 13 }}>
-          Tổng cộng <strong>{data.length}</strong> phòng ban
+          Tổng cộng <strong>{data.length}</strong> nhà thầu
           {search && (
-            <> — đang hiển thị <strong style={{ color: "#1677ff" }}>{filtered.length}</strong> kết quả</>
+            <> — đang hiển thị <strong style={{ color: "#059669" }}>{filtered.length}</strong> kết quả</>
           )}
         </Text>
       </div>
@@ -78,7 +79,7 @@ export default function Office() {
       <div style={{ marginBottom: 16, maxWidth: 360 }}>
         <Input
           prefix={<SearchOutlined style={{ color: "#bbb" }} />}
-          placeholder="Tìm theo tên phòng ban..."
+          placeholder="Tìm theo tên hoặc mô tả..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           allowClear
@@ -92,14 +93,14 @@ export default function Office() {
           <Spin size="large" />
         </div>
       ) : filtered.length === 0 ? (
-        <Empty description="Không tìm thấy văn phòng nào" />
+        <Empty description="Không tìm thấy nhà thầu nào" />
       ) : (
         <Row gutter={[16, 16]}>
-          {filtered.map((office) => (
-            <Col xs={24} sm={12} md={8} lg={6} key={office.id}>
+          {filtered.map((item) => (
+            <Col xs={24} sm={12} md={8} lg={6} key={item.id}>
               <Card
                 hoverable
-                onClick={() => navigate(`/office/${office.id}`)}
+                onClick={() => navigate(`/contractor/${item.id}`)}
                 style={{
                   borderRadius: 12,
                   border: "1.5px solid #f0f0f0",
@@ -115,33 +116,35 @@ export default function Office() {
                       width: 42,
                       height: 42,
                       borderRadius: 10,
-                      background: "#e6f4ff",
+                      background: "#f0fdf4",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                       fontSize: 20,
-                      color: "#1677ff",
+                      color: "#059669",
                       flexShrink: 0,
                     }}
                   >
-                    <BankOutlined />
+                    <ToolOutlined />
                   </div>
                   <div style={{ minWidth: 0 }}>
                     <Text
                       strong
                       style={{ fontSize: 14, display: "block", lineHeight: 1.4 }}
-                      ellipsis={{ tooltip: office.name }}
+                      ellipsis={{ tooltip: item.name }}
                     >
-                      {office.name}
+                      {item.name}
                     </Text>
-                    {office.description && (
+                    {item.description ? (
                       <Text
                         type="secondary"
                         style={{ fontSize: 12, display: "block", marginTop: 2 }}
-                        ellipsis={{ tooltip: office.description }}
+                        ellipsis={{ tooltip: item.description }}
                       >
-                        {office.description}
+                        {item.description}
                       </Text>
+                    ) : (
+                      <Text type="secondary" style={{ fontSize: 12 }}>Chưa có mô tả</Text>
                     )}
                   </div>
                 </div>
@@ -159,11 +162,11 @@ export default function Office() {
                 >
                   <Space size={4}>
                     <TeamOutlined style={{ color: "#999", fontSize: 13 }} />
-                    {office.contact_count != null ? (
+                    {item.contact_count != null ? (
                       <Badge
-                        count={office.contact_count}
+                        count={item.contact_count}
                         overflowCount={999}
-                        style={{ backgroundColor: "#1677ff", fontSize: 11 }}
+                        style={{ backgroundColor: "#059669", fontSize: 11 }}
                         showZero
                       />
                     ) : (

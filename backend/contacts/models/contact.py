@@ -6,6 +6,7 @@ from .title import Titles
 from .tollplaza import Tollplaza
 from .office import Office
 from .parking import Parking
+from .contractor import Contractor
 
 
 class Contact(models.Model):
@@ -14,6 +15,7 @@ class Contact(models.Model):
         ('tollplaza', 'TollPlaza'),
         ('parking', 'Parking'),
         ('office', 'Office'),
+        ('contractor', 'Contractor'),
     )
 
     firstname = models.CharField(
@@ -84,6 +86,11 @@ class Contact(models.Model):
         blank=True,
         related_name='contacts'
     )
+    contractors = models.ManyToManyField(
+        Contractor,
+        blank=True,
+        related_name='contacts'
+    )
 
     status = models.SmallIntegerField(
         default=1,
@@ -105,10 +112,11 @@ class Contact(models.Model):
         has_toll = self.tollplazas.exists()
         has_parking = self.parkings.exists()
         has_office = self.offices.exists()
+        has_contractor = self.contractors.exists()
 
-        if sum([has_toll, has_parking, has_office]) > 1:
+        if sum([has_toll, has_parking, has_office, has_contractor]) > 1:
             errors['__all__'] = (
-                "Contact chỉ được liên kết với một trong: TollPlaza, Parking, Office."
+                "Contact chỉ được liên kết với một trong: TollPlaza, Parking, Office, Contractor    ."
             )
 
         if errors:
@@ -129,12 +137,19 @@ class Contact(models.Model):
         if self.contact_type == 'tollplaza':
             self.parkings.clear()
             self.offices.clear()
+            self.contractors.clear()
         elif self.contact_type == 'parking':
             self.tollplazas.clear()
             self.offices.clear()
+            self.contractors.clear()
         elif self.contact_type == 'office':
             self.tollplazas.clear()
             self.parkings.clear()
+            self.contractors.clear()
+        elif self.contact_type == 'contractor':
+            self.tollplazas.clear()
+            self.parkings.clear()
+            self.offices.clear()
 
     class Meta:
         db_table = 'contacts'
@@ -155,6 +170,8 @@ def _set_exclusive_type(instance, set_name):
             instance.parkings.clear()
         if instance.offices.exists():
             instance.offices.clear()
+        if instance.contractors.exists():
+            instance.contractors.clear()
         new_type = 'tollplaza'
 
     elif set_name == 'parkings':
@@ -162,13 +179,26 @@ def _set_exclusive_type(instance, set_name):
             instance.tollplazas.clear()
         if instance.offices.exists():
             instance.offices.clear()
+        if instance.contractors.exists():
+            instance.contractors.clear()
         new_type = 'parking'
+
+    elif set_name == 'contractors':
+        if instance.tollplazas.exists():
+            instance.tollplazas.clear()
+        if instance.parkings.exists():
+            instance.parkings.clear()
+        if instance.offices.exists():
+            instance.offices.clear()
+        new_type = 'contractor'
 
     else:  # offices
         if instance.tollplazas.exists():
             instance.tollplazas.clear()
         if instance.parkings.exists():
             instance.parkings.clear()
+        if instance.contractors.exists():
+            instance.contractors.clear()
         new_type = 'office'
 
     # update contact_type if needed
@@ -187,10 +217,11 @@ def _on_m2m_changed(sender, instance, action, reverse, model, pk_set, **kwargs):
             _set_exclusive_type(instance, 'parkings')
         elif sender == Contact.offices.through:
             _set_exclusive_type(instance, 'offices')
-
+        elif sender == Contact.contractors.through:
+            _set_exclusive_type(instance, 'contractors')
     elif action == 'post_remove':
         # if after removal there are no relations, clear contact_type
-        if not (instance.tollplazas.exists() or instance.parkings.exists() or instance.offices.exists()):
+        if not (instance.tollplazas.exists() or instance.parkings.exists() or instance.offices.exists() or instance.contractors.exists()):
             if instance.contact_type is not None:
                 instance.contact_type = None
                 instance.save(update_fields=['contact_type'])
@@ -200,3 +231,4 @@ def _on_m2m_changed(sender, instance, action, reverse, model, pk_set, **kwargs):
 m2m_changed.connect(_on_m2m_changed, sender=Contact.tollplazas.through)
 m2m_changed.connect(_on_m2m_changed, sender=Contact.parkings.through)
 m2m_changed.connect(_on_m2m_changed, sender=Contact.offices.through)
+m2m_changed.connect(_on_m2m_changed, sender=Contact.contractors.through)

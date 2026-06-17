@@ -42,6 +42,10 @@ class OfficeSimpleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Office
         fields = ["id", "name"]
+class ContractorSimpleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contractor
+        fields = ["id", "name"]
 
 
 # =========================
@@ -102,6 +106,10 @@ class ContactSerializer(serializers.ModelSerializer):
         many=True,
         read_only=True
     )
+    contractors = ContractorSimpleSerializer(
+        many=True,
+        read_only=True
+    )
 
     contact_location_type = serializers.SerializerMethodField()
     contact_location_name = serializers.SerializerMethodField()
@@ -128,6 +136,7 @@ class ContactSerializer(serializers.ModelSerializer):
             "tollplazas",
             "parkings",
             "offices",
+            "contractors",
         ]
 
     def get_contact_location_type(self, obj):
@@ -140,6 +149,9 @@ class ContactSerializer(serializers.ModelSerializer):
 
         elif obj.contact_type == "office":
             return "office"
+
+        elif obj.contact_type == "contractor":
+            return "contractor"
 
         return None
 
@@ -160,6 +172,11 @@ class ContactSerializer(serializers.ModelSerializer):
             return ", ".join(
             obj.offices.values_list("name", flat=True)
         )
+
+        elif obj.contact_type == "contractor":
+            return ", ".join(
+                obj.contractors.values_list("name", flat=True)
+            )
 
         return None
 
@@ -189,6 +206,16 @@ class ParkingSerializer(serializers.ModelSerializer):
 class OfficeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Office
+        fields = [
+            "id",
+            "name",
+            "status",
+            "created_at",
+            "updated_at",
+        ]
+class ContractorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contractor
         fields = [
             "id",
             "name",

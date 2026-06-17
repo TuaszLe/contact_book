@@ -11,4 +11,4 @@ class Contractor(models.Model):
         return self.name
 
     class Meta:
-        db_table = 'contracters'
+        db_table = 'contractor'
