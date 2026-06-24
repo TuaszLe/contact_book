@@ -166,7 +166,7 @@ function AutoFitBounds({ data }: { data: StationData[] }) {
 export default function MapView({ data, height = 520 }: Props) {
   return (
     <MapContainer
-      style={{ height: "100%", width: "100%" }}
+      style={{ height, width: "100%" }}
       scrollWheelZoom
     >
       <TileLayer
