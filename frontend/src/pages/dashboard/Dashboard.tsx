@@ -199,9 +199,6 @@ export default function Dashboard() {
   const parkingByContractor = groupBy(parkings, (i) => i.contractor_name || "");
   const parkingByType = groupBy(parkings, (i) => i.type_name || "");
   const totalTollLanes = tollplazas.reduce((s, i) => s + (i.lanes ?? 0), 0);
-/*  const withCoords = tollplazas.filter(
-    (i) => i.lat && i.lng && !isNaN(Number(i.lat)) && !isNaN(Number(i.lng)),
-  ).length;*/
 
   const topToll = [...tollplazas]
     .filter((i) => (i.lanes ?? 0) > 0)
@@ -262,7 +259,6 @@ export default function Dashboard() {
 
   return (
     <div style={{ padding: "0 4px" }}>
-      {/* Page title */}
       <div style={{ marginBottom: 20 }}>
         <Title level={4} style={{ margin: 0 }}>
           📊 Dashboard
@@ -274,15 +270,13 @@ export default function Dashboard() {
         defaultActiveKey="toll"
         size="large"
         items={[
-          // ================= TOLL =================
           {
             key: "toll",
             label: <span>🚧 Trạm thu phí</span>,
             children: (
               <div>
-                {/* KPI Row */}
-                <Row gutter={[16, 16]} style={{ marginBottom: 20 }}>
-                  <Col xs={12} sm={6}>
+                <Row gutter={[16, 16]} style={{ marginBottom: 20 }} justify="center">
+                  <Col xs={22} sm={10} md={8} lg={6}>
                     <KpiCard
                       title="Tổng trạm"
                       value={tollplazas.length}
@@ -290,7 +284,7 @@ export default function Dashboard() {
                       color="#1677ff"
                     />
                   </Col>
-                  <Col xs={12} sm={6}>
+                  <Col xs={22} sm={10} md={8} lg={6}>
                     <KpiCard
                       title="Tổng làn"
                       value={totalTollLanes}
@@ -301,9 +295,7 @@ export default function Dashboard() {
                   </Col>
                 </Row>
 
-                {/* Bố cục: Bản đồ dọc bên trái, thông tin bên phải */}
                 <Row gutter={[16, 16]}>
-                  {/* Bản đồ — cao hơn, dọc theo hình Việt Nam */}
                   <Col xs={24} lg={14}>
                     <Card
                       title={
@@ -312,11 +304,7 @@ export default function Dashboard() {
                           Vị trí trạm trên bản đồ
                           <Text
                             type="secondary"
-                            style={{
-                              fontSize: 12,
-                              marginLeft: 8,
-                              fontWeight: 400,
-                            }}
+                            style={{ fontSize: 12, marginLeft: 8, fontWeight: 400 }}
                           >
                             (click vào nút tròn để xem chi tiết)
                           </Text>
@@ -331,14 +319,12 @@ export default function Dashboard() {
                         },
                       }}
                     >
-                      {/* height 520px — đủ để hiển thị dọc Việt Nam từ Lạng Sơn → Cà Mau */}
-                      <div style={{ height: 520 }}>
-                        <MapView data={tollplazas} height={520} />
+                      <div style={{ height: 720 }}>
+                        <MapView data={tollplazas} height={750} />
                       </div>
                     </Card>
                   </Col>
 
-                  {/* Right: Theo loại + Theo dự án */}
                   <Col xs={24} lg={10}>
                     <Row gutter={[0, 16]}>
                       <Col span={24}>
@@ -359,7 +345,6 @@ export default function Dashboard() {
                   </Col>
                 </Row>
 
-                {/* Top trạm nhiều làn */}
                 {topToll.length > 0 && (
                   <>
                     <Divider style={{ margin: "20px 0 16px" }} />
@@ -380,8 +365,8 @@ export default function Dashboard() {
                                   idx === 0
                                     ? "#fff7e6"
                                     : idx === 1
-                                      ? "#f6ffed"
-                                      : "#fafafa",
+                                    ? "#f6ffed"
+                                    : "#fafafa",
                                 borderRadius: 8,
                                 border: "1px solid #f0f0f0",
                               }}
@@ -395,8 +380,8 @@ export default function Dashboard() {
                                     idx === 0
                                       ? "#fa8c16"
                                       : idx === 1
-                                        ? "#52c41a"
-                                        : "#d9d9d9",
+                                      ? "#52c41a"
+                                      : "#d9d9d9",
                                   color: "#fff",
                                   display: "flex",
                                   alignItems: "center",
@@ -435,8 +420,6 @@ export default function Dashboard() {
               </div>
             ),
           },
-
-          // ================= PARKING =================
           {
             key: "parking",
             label: <span>🅿️ Bãi đỗ xe</span>,
@@ -456,7 +439,8 @@ export default function Dashboard() {
                       title="Bãi mở"
                       value={
                         parkings.filter(
-                          (i) => i.type_name?.toLowerCase().trim() === "mở",
+                          (i) =>
+                            i.type_name?.toLowerCase().trim() === "mở",
                         ).length
                       }
                       icon={<span style={{ fontSize: 18 }}>🌅</span>}
@@ -468,7 +452,8 @@ export default function Dashboard() {
                       title="Bãi kín"
                       value={
                         parkings.filter(
-                          (i) => i.type_name?.toLowerCase().trim() === "kín",
+                          (i) =>
+                            i.type_name?.toLowerCase().trim() === "kín",
                         ).length
                       }
                       icon={<span style={{ fontSize: 18 }}>🏚️</span>}
@@ -476,7 +461,6 @@ export default function Dashboard() {
                     />
                   </Col>
                 </Row>
-
                 <Row gutter={[16, 16]}>
                   <Col xs={24} lg={10}>
                     <Row gutter={[0, 16]}>
@@ -498,7 +482,6 @@ export default function Dashboard() {
                       </Col>
                     </Row>
                   </Col>
-
                   <Col xs={24} lg={14}>
                     <Card
                       title="📍 Danh sách bãi đỗ"

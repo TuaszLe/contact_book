@@ -1,4 +1,5 @@
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Typography, Tag, Divider } from "antd";
@@ -11,7 +12,6 @@ import {
 
 const { Text } = Typography;
 
-// Custom SVG dot icon — teal, viền trắng, bóng đổ, hiệu ứng pulse
 const svgIcon = L.divIcon({
   className: "",
   html: `
@@ -60,7 +60,6 @@ interface Props {
 function StationPopup({ item }: { item: StationData }) {
   return (
     <div style={{ minWidth: 220, fontFamily: "inherit" }}>
-      {/* Tiêu đề */}
       <div
         style={{
           background: "linear-gradient(135deg, #0e9488 0%, #0891b2 100%)",
@@ -71,12 +70,7 @@ function StationPopup({ item }: { item: StationData }) {
       >
         <Text
           strong
-          style={{
-            color: "#fff",
-            fontSize: 14,
-            display: "block",
-            lineHeight: 1.3,
-          }}
+          style={{ color: "#fff", fontSize: 14, display: "block", lineHeight: 1.3 }}
         >
           {item.name}
         </Text>
@@ -99,63 +93,30 @@ function StationPopup({ item }: { item: StationData }) {
 
       <div style={{ padding: "10px 4px 0" }}>
         {item.project_name && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 7,
-              marginBottom: 7,
-            }}
-          >
-            <ProjectOutlined
-              style={{ color: "#1677ff", fontSize: 13, flexShrink: 0 }}
-            />
+          <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 7 }}>
+            <ProjectOutlined style={{ color: "#1677ff", fontSize: 13, flexShrink: 0 }} />
             <Text style={{ fontSize: 12 }}>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                Dự án:{" "}
-              </Text>
+              <Text type="secondary" style={{ fontSize: 12 }}>Dự án: </Text>
               {item.project_name}
             </Text>
           </div>
         )}
 
         {item.contractor_name && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 7,
-              marginBottom: 7,
-            }}
-          >
-            <InfoCircleOutlined
-              style={{ color: "#7c3aed", fontSize: 13, flexShrink: 0 }}
-            />
+          <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 7 }}>
+            <InfoCircleOutlined style={{ color: "#7c3aed", fontSize: 13, flexShrink: 0 }} />
             <Text style={{ fontSize: 12 }}>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                Nhà thầu:{" "}
-              </Text>
+              <Text type="secondary" style={{ fontSize: 12 }}>Nhà thầu: </Text>
               {item.contractor_name}
             </Text>
           </div>
         )}
 
         {(item.lanes ?? 0) > 0 && (
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 7,
-              marginBottom: 7,
-            }}
-          >
-            <CarOutlined
-              style={{ color: "#ea580c", fontSize: 13, flexShrink: 0 }}
-            />
+          <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 7 }}>
+            <CarOutlined style={{ color: "#ea580c", fontSize: 13, flexShrink: 0 }} />
             <Text style={{ fontSize: 12 }}>
-              <Text type="secondary" style={{ fontSize: 12 }}>
-                Số làn:{" "}
-              </Text>
+              <Text type="secondary" style={{ fontSize: 12 }}>Số làn: </Text>
               <Text strong>{item.lanes}</Text> làn
             </Text>
           </div>
@@ -165,9 +126,7 @@ function StationPopup({ item }: { item: StationData }) {
           <>
             <Divider style={{ margin: "8px 0" }} />
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-              <EnvironmentOutlined
-                style={{ color: "#0e9488", fontSize: 13, flexShrink: 0 }}
-              />
+              <EnvironmentOutlined style={{ color: "#0e9488", fontSize: 13, flexShrink: 0 }} />
               <Text type="secondary" style={{ fontSize: 11 }}>
                 {Number(item.lat).toFixed(5)}, {Number(item.lng).toFixed(5)}
               </Text>
@@ -190,15 +149,23 @@ function StationPopup({ item }: { item: StationData }) {
   );
 }
 
-export default function MapView({ data }: Props) {
-  // Center dọc theo Việt Nam: trung điểm kinh tuyến ~107.5°E, vĩ tuyến ~16.5°N
-  // zoom=5.6 hiển thị toàn dải từ Lạng Sơn (23°N) → Cà Mau (8.5°N)
-  const center: [number, number] = [16.5, 107.5];
+function AutoFitBounds({ data }: { data: StationData[] }) {
+  const map = useMap();
+  useEffect(() => {
+    const validPoints = data
+      .filter((i) => i.lat && i.lng && !isNaN(Number(i.lat)) && !isNaN(Number(i.lng)))
+      .map((i) => [Number(i.lat), Number(i.lng)] as [number, number]);
 
+    if (validPoints.length > 0) {
+      map.fitBounds(validPoints, { padding: [20, 20] });
+    }
+  }, [data, map]);
+  return null;
+}
+
+export default function MapView({ data, height = 520 }: Props) {
   return (
     <MapContainer
-      center={center}
-      zoom={5.6}
       style={{ height: "100%", width: "100%" }}
       scrollWheelZoom
     >
@@ -206,7 +173,7 @@ export default function MapView({ data }: Props) {
         url="https://mt0.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
         attribution='&copy; <a href="https://www.google.com/maps">Google Maps</a>'
       />
-
+      <AutoFitBounds data={data} />
       {data.map((item) =>
         item.lat &&
         item.lng &&
