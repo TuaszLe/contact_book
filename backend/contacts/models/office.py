@@ -1,5 +1,4 @@
 from django.db import models
-from .type import Type
 
 class Office(models.Model):
     name = models.CharField(max_length=255)

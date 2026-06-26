@@ -16,6 +16,8 @@ import OfficeDetail from "./pages/office/OfficeDetail";
 import Office from "./pages/office/Office";
 import Ds_truong_tuyen from "./pages/sharepoint/ds_truong_tuyen";
 import Xu_Ly_Lv_1 from "./pages/sharepoint/xu_ly_lv_1";
+import Contractor from "./pages/contractor/Contractor";
+import ContractorDetail from "./pages/contractor/ContracDetail";
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
           <Route path="/office" element={<Office />} />
           <Route path="/office/:id" element={<OfficeDetail />} />
           <Route path="/xu_ly_lv_1" element={<Xu_Ly_Lv_1 />} />
+          <Route path="/contractor" element={<Contractor />} />
+          <Route path="/contractor/:id" element={<ContractorDetail />} />
         </Routes>
       </AppLayout>
     </BrowserRouter>
